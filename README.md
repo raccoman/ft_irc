@@ -1,2 +1,36 @@
-# ft_irc
-42Cursus | This project aims to develop an Internet Relay Chat Server
+<p align="center">
+  <img src="https://img.shields.io/github/contributors/raccoman/ft_irc?style=for-the-badge"/>
+  <img src="https://img.shields.io/github/forks/raccoman/ft_irc?style=for-the-badge"/>
+  <img src="https://img.shields.io/github/stars/raccoman/ft_irc?style=for-the-badge"/>
+  <img src="https://img.shields.io/github/issues/raccoman/ft_irc?style=for-the-badge"/>
+  <img src="https://img.shields.io/github/license/raccoman/ft_irc?style=for-the-badge"/>
+</p>
+
+<p align="center">
+  <img src="https://badge42.herokuapp.com/api/stats/raccoman?privacyEmail=true"/>
+</p>
+<h3 align="center">
+  INCEPTION
+</h3>
+<p align="center">
+  This project aims to broaden your knowledge of system administration by using Docker
+</p>
+
+<h2 align="center">
+  Evaluation
+</h2>
+<p align="center">
+  <img src="https://badge42.herokuapp.com/api/project/raccoman/ft_irc"/>
+</p>
+
+<h2 align="center">
+  Contact
+</h2>
+<p align="center">
+  This is my ft_irc project from the 42 cursus, need help: raccoman@student.42roma.it
+</p>
+
+<p align="center">
+    <img src="https://forthebadge.com/images/badges/made-with-c.svg"/>
+    <img src="https://forthebadge.com/images/badges/not-a-bug-a-feature.svg"/>
+</p>
