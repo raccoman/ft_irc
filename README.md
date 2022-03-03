@@ -10,10 +10,10 @@
   <img src="https://badge42.herokuapp.com/api/stats/raccoman?privacyEmail=true"/>
 </p>
 <h3 align="center">
-  INCEPTION
+  FT_IRC
 </h3>
 <p align="center">
-  This project aims to broaden your knowledge of system administration by using Docker
+  This project aims to develop an Internet Relay Chat Server
 </p>
 
 <h2 align="center">
