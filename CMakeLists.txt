@@ -4,6 +4,6 @@ set(CMAKE_CXX_STANDARD 98)
 
 include_directories(include)
 set(SOURCES
-		src/Server.cpp)
+		src/Server.cpp src/Client.cpp include/Client.hpp)
 
-add_executable(ft_irc main.cpp ${SOURCES})
+add_executable(ft_irc src/main.cpp ${SOURCES})

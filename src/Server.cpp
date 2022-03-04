@@ -1,42 +1,142 @@
 #include "Server.hpp"
 
 Server::Server(const std::string &port, const std::string &password)
-	: _host("127.0.0.1"), _port(port), _password(password) {
+		: _host("127.0.0.1"), _port(port), _password(password) {
 
-	_sock = newSocket();
+	_sock = newSocket(1);
 }
 
 Server::~Server() {
 
 }
 
-void Server::start() {
+// PASSWORD:
+// https://stackoverflow.com/questions/46333306/how-do-i-make-an-irc-channel-with-password
 
+void Server::start() {
+	pollfd	server_fd = {_sock, POLLIN, 0};
+	_pollfds.push_back(server_fd);
+
+	ft_log("Server listening...");
+
+	while (true) {
+		// Loop waiting for incoming connects or for incoming data on any of the connected sockets.
+		if (poll(_pollfds.begin().base(), _pollfds.size(), -1) < 0)
+			throw std::runtime_error("Error while polling from fd.");
+
+		// One or more descriptors are readable. Need to determine which ones they are.
+		for (pollfds_iterator it = _pollfds.begin(); it != _pollfds.end(); it++) {
+
+			if (it->revents == 0)
+				continue;
+
+			if ((it->revents & POLLHUP) == POLLHUP) {
+				ft_log("Client has disconnected.");
+			}
+
+			if ((it->revents & POLLIN) == POLLIN) {
+
+				if (it->fd == _sock) {
+
+					Client *client = acceptClient();
+					_clients.insert(std::make_pair(it->fd, client));
+
+					char message[1000];
+					sprintf(message, "%s:%d has connected.", client->getHostname().c_str(), client->getPort());
+					ft_log(message);
+
+					if (send(client->getFD(), HANDSHAKE_MESSAGE, strlen(HANDSHAKE_MESSAGE), 0) < 0)
+						throw std::runtime_error("Error while sending handshake to client.");
+
+					break;
+				}
+
+				//Client *client = _clients.at(it->fd);
+				ft_log(readMessage(it->fd));
+			}
+		}
+	}
 }
 
-int Server::newSocket() {
+std::string Server::readMessage(int fd) {
+	std::string	message;
+	char		buffer[100];
+	ssize_t		length;
+
+	bzero(buffer, 100);
+	while (!std::strstr(buffer, "\n\r")) {
+
+		bzero(buffer, 100);
+		length = recv(fd, buffer, 100, 0);
+		if (length < 0) {
+			if (errno != EWOULDBLOCK)
+				throw std::runtime_error("Error while reading buffer from client.");
+			break;
+		}
+		message.append(buffer);
+	}
+
+	return message;
+}
+
+Client *Server::acceptClient() {
+	int fd;
+	sockaddr_in s_address;
+	socklen_t s_size = sizeof(s_address);
+
+	fd = accept(_sock, (sockaddr *) &s_address, &s_size);
+	if (fd < 0)
+		throw std::runtime_error("Error while accepting new client.");
+
+	pollfd	pollfd = {fd, POLLIN, 0};
+	_pollfds.push_back(pollfd);
+
+	return new Client(fd, inet_ntoa(s_address.sin_addr), ntohs(s_address.sin_port));
+}
+
+void Server::ft_log(const std::string &message) {
+	time_t rawtime;
+	struct tm * timeinfo;
+	char buffer[80];
+
+	time (&rawtime);
+	timeinfo = localtime(&rawtime);
+
+	strftime(buffer,sizeof(buffer),"%d-%m-%Y %H:%M:%S",timeinfo);
+	std::string str(buffer);
+	std::cout << "[" << str << "] " << message << std::endl;
+}
+
+int Server::newSocket(int nonblocking) {
+
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if (sockfd < 0)
+		throw std::runtime_error("Error while opening socket.");
+
+	// Forcefully attaching socket to the port
+	int val = 1;
+	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)))
+		throw std::runtime_error("Error while setting socket options.");
 
 	/*
 	 * As requested from subject we set the socket to NON-BLOCKING mode
 	 * allowing it to return any data that the system has in it's read buffer
 	 * for that socket, but, it won't wait for that data.
 	 */
-	fcntl(sockfd, F_SETFL, O_NONBLOCK);
+	if (nonblocking && fcntl(sockfd, F_SETFL, O_NONBLOCK) == -1) {
+		throw std::runtime_error("Error while setting socket to NON-BLOCKING.");
+	}
 
-	if (sockfd < 0)
-		throw std::runtime_error("Error while opening socket.");
 	struct sockaddr_in serv_address = {};
 
 	// Clear address structure, should prevent some segmentation fault and artifacts
 	bzero((char *) &serv_address, sizeof(serv_address));
 
-	serv_address.sin_family = AF_INET; // Set TCP IPV4 protocol (AF_INET6 for IPV6)
-
-	// Automatically be filled with current host's IP address
+	/*
+	 * htons() convert unsigned short int to big-endian network byte order as expected from TCP protocol standards
+	 */
+	serv_address.sin_family = AF_INET;
 	serv_address.sin_addr.s_addr = INADDR_ANY;
-
-	// This convert unsigned short int to big-endian network byte order as expected from TCP protocol standards
 	serv_address.sin_port = htons(std::stoi(_port));
 
 	// Bind the socket to the current IP address on selected port
