@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <fcntl.h>
 
 #define MAX_CONNECTIONS 1000
 
