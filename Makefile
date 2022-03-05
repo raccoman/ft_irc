@@ -3,7 +3,7 @@ NAME =			ircserv
 
 #Compiler
 CC = 			clang++
-CFLAGS = 		-Wall -Wextra -Werror -std=c++98
+CFLAGS = 		-std=c++98
 LIBRARIES =
 CFLAG = 		-c
 OFLAG =			-o
@@ -27,7 +27,9 @@ HEADERS_DIR =	./include
 #Files
 FILES =		main.cpp \
 			Server.cpp \
-			Client.cpp
+			Client.cpp \
+			CommandHandler.cpp \
+			NickCommand.cpp
 
 #Srcs
 SRCS =			$(foreach FILE, $(FILES), $(shell find $(SOURCES_DIR) -name $(FILE)))

@@ -1,19 +1,22 @@
 #include "Server.hpp"
 
-int main(int argc, char **argv) {
-	
-	try {
+int main(int argc, char **argv)
+{
 
-		if (argc != 3) {
+	try
+	{
+
+		if (argc != 3)
+		{
 			throw std::runtime_error("Usage: ./ircserv <port> <password>");
 		}
 
 		Server server(argv[1], argv[2]);
 		server.start();
 		return 0;
-
-	} catch (const std::exception &ex) {
+	}
+	catch (const std::exception &ex)
+	{
 		std::cerr << ex.what() << std::endl;
 	}
-
 }
