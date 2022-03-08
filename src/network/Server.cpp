@@ -1,11 +1,11 @@
-#include "Server.hpp"
+#include "network/Server.hpp"
 
 Server::Server(const std::string &port, const std::string &password)
 	: _host("127.0.0.1"), _port(port), _password(password)
 {
 
 	_sock = newSocket(1);
-	_commandHandler = new CommandHandler();
+	_commandHandler = new CommandHandler(this);
 }
 
 Server::~Server()
@@ -72,9 +72,6 @@ void Server::onClientConnect()
 	char message[1000];
 	sprintf(message, "%s:%d has connected.", client->getHostname().c_str(), client->getPort());
 	ft_log(message);
-
-	if (send(client->getFD(), HANDSHAKE_MESSAGE, strlen(HANDSHAKE_MESSAGE), 0) < 0)
-		throw std::runtime_error("Error while sending handshake to client.");
 }
 
 void Server::onClientDisconnect(int fd)
@@ -104,7 +101,7 @@ std::string Server::readMessage(int fd)
 	ssize_t length;
 
 	bzero(buffer, 100);
-	while (!std::strstr(buffer, "\n\r"))
+	while (!std::strstr(buffer, MSG_DELIMITER))
 	{
 
 		bzero(buffer, 100);
@@ -164,4 +161,14 @@ int Server::newSocket(int nonblocking)
 		throw std::runtime_error("Error while listening on socket.");
 
 	return sockfd;
+}
+
+Client *Server::getClient(const std::string &nickname)
+{
+	for (std::map<int, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		if (!nickname.compare(it->second->getNickname()))
+			return it->second;
+	}
+	return nullptr;
 }

@@ -1,6 +1,8 @@
 #ifndef FT_IRC_SERVER_HPP
 #define FT_IRC_SERVER_HPP
 
+class Server;
+
 #include <algorithm>
 #include <sys/poll.h>
 #include <sys/socket.h>
@@ -11,13 +13,12 @@
 #include <map>
 #include <poll.h>
 
-#include "CommandHandler.hpp"
+#include "commands/CommandHandler.hpp"
 #include "Client.hpp"
 #include "logger.hpp"
 
-#define HANDSHAKE_MESSAGE "PASS NICK USER\n\r"
-
 #define MAX_CONNECTIONS 1000
+#define MSG_DELIMITER "\n\r"
 
 class Server
 {
@@ -37,6 +38,9 @@ public:
 	~Server();
 
 	void start();
+
+	std::string getPassword() const { return _password; };
+	Client *getClient(const std::string &nickname);
 
 private:
 	int newSocket(int nonblocking = 0);

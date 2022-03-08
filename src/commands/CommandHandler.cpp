@@ -1,20 +1,19 @@
-#include "CommandHandler.hpp"
+#include "commands/CommandHandler.hpp"
 
-CommandHandler::CommandHandler()
+CommandHandler::CommandHandler(Server *server) : _server(server)
 {
-	_commands["NICK"] = new NickCommand();
-	//     _commands["USER"] = NULL;
-	//     _commands["HELP"] = NULL;
-	//     _commands["PASS"] = NULL;
-	//     _commands["QUIT"] = NULL;
+	_commands["PASS"] = new PassCommand(_server);
+	_commands["NICK"] = new NickCommand(_server);
+	_commands["USER"] = new UserCommand(_server);
 }
 
 CommandHandler::~CommandHandler()
 {
 }
 
-void CommandHandler::invoke(Client *client, const std::string &message) // PASS ciaociao s a
+void CommandHandler::invoke(Client *client, const std::string &message)
 {
+	std::cout << message << std::endl;
 
 	std::string name = message.substr(0, message.find(" "));
 	std::transform(name.begin(), name.end(), name.begin(), ::toupper);
@@ -23,22 +22,19 @@ void CommandHandler::invoke(Client *client, const std::string &message) // PASS 
 	{
 		Command *command = _commands.at(name);
 
+		std::string buf;
 		std::vector<std::string> arguments;
-		std::string arguments_text = message.substr(name.length(), message.length());
+		std::stringstream ss(message.substr(name.length(), message.length()));
 
-		size_t pos = 0;
-		while ((pos = arguments_text.find(" ")) != std::string::npos)
-		{
-			arguments.push_back(arguments_text.substr(0, pos));
-			arguments_text.erase(0, pos + 1);
-		}
+		while (ss >> buf)
+			arguments.push_back(buf);
 
-		command->execute(client, name, arguments);
+		command->execute(client, arguments);
 	}
 	catch (const std::out_of_range &e)
 	{
-		char message[1000];
-		sprintf(message, "%s:%d has sent unknown command: %s.", client->getHostname().c_str(), client->getPort(), name.c_str());
-		ft_log(message);
+		char buffer[100];
+		sprintf(buffer, "%s:%d has sent unknown command: %s.", client->getHostname().c_str(), client->getPort(), name.c_str());
+		ft_log(buffer);
 	}
 }

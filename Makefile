@@ -29,7 +29,9 @@ FILES =		main.cpp \
 			Server.cpp \
 			Client.cpp \
 			CommandHandler.cpp \
-			NickCommand.cpp
+			NickCommand.cpp \
+			PassCommand.cpp \
+			UserCommand.cpp
 
 #Srcs
 SRCS =			$(foreach FILE, $(FILES), $(shell find $(SOURCES_DIR) -name $(FILE)))

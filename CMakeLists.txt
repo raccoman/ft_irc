@@ -3,7 +3,13 @@ project(ft_irc)
 set(CMAKE_CXX_STANDARD 98)
 
 include_directories(include)
+include_directories(include/network)
+include_directories(include/commands)
+
 set(SOURCES
-		src/Server.cpp src/Client.cpp include/Client.hpp)
+		src/network/Server.cpp
+		src/network/Client.cpp
+		src/commands/CommandHandler.cpp
+		src/commands/impl/NickCommand.cpp)
 
 add_executable(ft_irc src/main.cpp ${SOURCES})
