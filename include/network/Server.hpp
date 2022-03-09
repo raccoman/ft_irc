@@ -43,6 +43,7 @@ public:
 
 	std::string getPassword() const { return _password; };
 	Client *getClient(const std::string &nickname);
+	Channel* getChannel(const std::string &name);
 	void addChannel(const std::string &name, const std::string &password) {};
 
 private:

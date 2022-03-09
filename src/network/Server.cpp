@@ -163,10 +163,17 @@ int Server::newSocket(int nonblocking)
 	return sockfd;
 }
 
-Client *Server::getClient(const std::string &nickname)
-{
-	for (std::map<int, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
-	{
+Channel* Server::getChannel(const std::string &name) {
+	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++) {
+		if ((*it)->getName() == name) {
+			return *it;
+		}
+	}
+	return nullptr;
+}
+
+Client *Server::getClient(const std::string &nickname) {
+	for (std::map<int, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++) {
 		if (!nickname.compare(it->second->getNickname()))
 			return it->second;
 	}

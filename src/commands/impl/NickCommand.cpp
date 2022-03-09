@@ -6,7 +6,7 @@ NickCommand::~NickCommand() {}
 
 void NickCommand::execute(Client *client, std::vector<std::string> arguments) {
 
-	if (arguments.empty() && arguments[0].empty()) {
+	if (arguments.empty() || arguments[0].empty()) {
 		client->sendMessage(ERR_NONICKNAMEGIVEN);
 		return;
 	}

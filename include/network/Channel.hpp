@@ -6,10 +6,12 @@
 
 class Channel;
 
-#include "Server.hpp"
-#include "Client.hpp"
+# include "Server.hpp"
+# include "Client.hpp"
 
 class Channel {
+
+	typedef std::vector<Client *>::iterator client_iter;
 private:
 	std::string				_name;
 	Client *				_admin;
@@ -21,9 +23,10 @@ public:
 	Channel(const std::string &name, const std::string &password, Client *admin);
 	~Channel();
 
-	
+	std::string getName() const { return _name; };
+	std::vector<Client *>::iterator getClient(Client *client);
 	void addClient(Client *newClient) { _clients.push_back(newClient); };
-	void removeClient(Client *client) { _clients.erase(client); };
+	void removeClient(Client *client);
 
 };
 

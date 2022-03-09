@@ -10,3 +10,24 @@ Channel::Channel(const std::string &name, const std::string &password, Client *a
 };
 
 Channel::~Channel() {};
+
+std::vector<Client *>::iterator Channel::getClient(Client *client) {
+	for (std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+		if ((*it) == client) {
+			return it;
+		}
+	}
+	return _clients.end();
+}
+
+void Channel::removeClient(Client *client) {
+	client_iter it;
+	if ((it = getClient(client)) != _clients.end()) {
+		_clients.erase(it);
+		std::cout << " Client kicked." << std::endl;
+//		TODO: reply to channel "[USERNAME] KICKED."
+	}
+	else {
+		std::cout << " Client doesn't exist." << std::endl;
+	}
+}
