@@ -50,4 +50,4 @@ private:
 	std::string readMessage(int fd);
 };
 
-#endif // FT_IRC_SERVER_HPP
+#endif

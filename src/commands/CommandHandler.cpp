@@ -15,7 +15,7 @@ void CommandHandler::invoke(Client *client, const std::string &message)
 {
 	std::cout << message << std::endl;
 
-	std::string name = message.substr(0, message.find(" "));
+	std::string name = message.substr(0, message.find(' '));
 	std::transform(name.begin(), name.end(), name.begin(), ::toupper);
 
 	try
@@ -29,7 +29,9 @@ void CommandHandler::invoke(Client *client, const std::string &message)
 		while (ss >> buf)
 			arguments.push_back(buf);
 
-		command->execute(client, arguments);
+		if ((name == "PASS" && name == "NICK" && name == "USER") || client->isRegistered()) {
+			command->execute(client, arguments);
+		}
 	}
 	catch (const std::out_of_range &e)
 	{

@@ -7,13 +7,6 @@ class Command;
 #include "network/Client.hpp"
 #include "network/Server.hpp"
 
-// ERROR REPLIES
-#define ERR_NEEDMOREPARAMS(command) "461 " command " * :Not enough parameters"
-#define ERR_ALREADYREGISTERED "462 * :You may not reregister"
-#define ERR_PASSWDMISMATCH "464 * :Password incorrect"
-#define ERR_NICKNAMEINUSE "433 * :Nickname is already in use"
-#define ERR_NONICKNAMEGIVEN "431 * :Nickname not given"
-
 class Command
 {
 

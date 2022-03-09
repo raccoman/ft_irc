@@ -10,6 +10,9 @@ set(SOURCES
 		src/network/Server.cpp
 		src/network/Client.cpp
 		src/commands/CommandHandler.cpp
-		src/commands/impl/NickCommand.cpp)
+		src/commands/impl/NickCommand.cpp
+		src/commands/impl/PassCommand.cpp
+		src/commands/impl/UserCommand.cpp
+		include/Utils.hpp)
 
 add_executable(ft_irc src/main.cpp ${SOURCES})
