@@ -29,14 +29,15 @@ void CommandHandler::invoke(Client *client, const std::string &message)
 		while (ss >> buf)
 			arguments.push_back(buf);
 
-		if ((name == "PASS" && name == "NICK" && name == "USER") || client->isRegistered()) {
+		if ((name == "PASS" || name == "NICK" || name == "USER") || (client->isRegistered() && !(name == "PASS" || name == "NICK" || name == "USER") )) {
 			command->execute(client, arguments);
 		}
+		else { std::cout << "ERROR: NOT REGISTERED" << std::endl; }
 	}
 	catch (const std::out_of_range &e)
 	{
 		char buffer[100];
-		sprintf(buffer, "%s:%d has sent unknown command: %s.", client->getHostname().c_str(), client->getPort(), name.c_str());
+		sprintf(buffer, "%s:%d has sent unknown command: %s", client->getHostname().c_str(), client->getPort(), name.c_str());
 		ft_log(buffer);
 	}
 }

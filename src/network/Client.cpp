@@ -1,3 +1,4 @@
+#include <iostream>
 #include "network/Client.hpp"
 
 Client::Client(int fd, const pollfds_iterator &pollfd, const std::string &hostname, int port)
@@ -19,5 +20,4 @@ void Client::checkRegistered() {
 		sendMessage(RPL_WELCOME(_nickname));
 		setRegistered(true);
 	}
-
 }

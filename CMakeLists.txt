@@ -13,6 +13,7 @@ set(SOURCES
 		src/commands/impl/NickCommand.cpp
 		src/commands/impl/PassCommand.cpp
 		src/commands/impl/UserCommand.cpp
-		include/Utils.hpp)
+		src/commands/impl/JoinCommand.cpp
+		include/Utils.hpp include/network/Channel.hpp src/network/Channel.cpp)
 
 add_executable(ft_irc src/main.cpp ${SOURCES})

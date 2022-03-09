@@ -8,10 +8,10 @@ class Client;
 #include <sys/poll.h>
 #include <sys/socket.h>
 #include "../Utils.hpp"
+#include "Channel.hpp"
 
 class Client
 {
-
 	typedef std::vector<pollfd>::iterator pollfds_iterator;
 
 private:
@@ -27,6 +27,8 @@ private:
 	bool _registered;
 	bool _entered; // Only checks for pass
 
+	Channel *_channel;
+
 public:
 	Client(int fd, const pollfds_iterator &pollfd, const std::string &hostname, int port);
 	~Client();
@@ -39,12 +41,14 @@ public:
 	std::string getNickname() const { return _nickname; };
 	std::string getUsername() const { return _username; };
 	std::string getRealName() const { return _realname; };
+	Channel* getChannel() const { return _channel; };
 
 	void setNickname(const std::string &nickname) { _nickname = nickname; };
 	void setUsername(const std::string &username) { _username = username; };
 	void setRealName(const std::string &realname) { _realname = realname; };
 	void setRegistered(const bool value) { _registered = value; };
 	void setEntered(const bool value) { _entered = value; };
+	void setChannel(Channel *channel) { _channel = channel; };
 
 	void checkRegistered();
 	void sendMessage(const std::string &message);

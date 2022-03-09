@@ -20,6 +20,15 @@ public:
     virtual void execute(Client *client, std::vector<std::string> arguments) = 0;
 };
 
+class JoinCommand : public Command
+{
+public:
+	JoinCommand(Server *server);
+	~JoinCommand();
+
+	void execute(Client *client, std::vector<std::string> arguments);
+};
+
 class UserCommand : public Command
 {
 public:

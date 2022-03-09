@@ -15,6 +15,7 @@ class Server;
 
 #include "commands/CommandHandler.hpp"
 #include "Client.hpp"
+#include "Channel.hpp"
 #include "logger.hpp"
 
 #define MAX_CONNECTIONS 1000
@@ -31,6 +32,7 @@ class Server
 	const std::string _password;
 	std::vector<pollfd> _pollfds;
 	std::map<int, Client *> _clients;
+	std::vector<Channel *> _channels;
 	CommandHandler *_commandHandler;
 
 public:
@@ -41,6 +43,7 @@ public:
 
 	std::string getPassword() const { return _password; };
 	Client *getClient(const std::string &nickname);
+	void addChannel(const std::string &name, const std::string &password) {};
 
 private:
 	int newSocket(int nonblocking = 0);
