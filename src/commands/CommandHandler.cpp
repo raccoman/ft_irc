@@ -6,14 +6,13 @@ CommandHandler::CommandHandler(Server *server) : _server(server) {
 	_commands["USER"] = new UserCommand(_server);
 
 	_commands["JOIN"] = new JoinCommand(_server);
+//	TODO: PART, QUIT, KICK commands to be implemented
 }
 
-CommandHandler::~CommandHandler()
-{
+CommandHandler::~CommandHandler() {
 }
 
-void CommandHandler::invoke(Client *client, const std::string &message)
-{
+void CommandHandler::invoke(Client *client, const std::string &message) {
 	std::cout << message << std::endl;
 
 	std::string name = message.substr(0, message.find(' '));
