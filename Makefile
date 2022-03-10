@@ -28,10 +28,12 @@ HEADERS_DIR =	./include
 FILES =		main.cpp \
 			Server.cpp \
 			Client.cpp \
+			Channel.cpp \
 			CommandHandler.cpp \
 			NickCommand.cpp \
 			PassCommand.cpp \
-			UserCommand.cpp
+			UserCommand.cpp \
+			JoinCommand.cpp
 
 #Srcs
 SRCS =			$(foreach FILE, $(FILES), $(shell find $(SOURCES_DIR) -name $(FILE)))

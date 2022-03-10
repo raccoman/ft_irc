@@ -173,3 +173,8 @@ Client *Server::getClient(const std::string &nickname) {
 	}
 	return nullptr;
 }
+
+void Server::addChannel(const std::string &name, const std::string &password, Client *client) {
+	Channel *channel = new Channel(name, password, client);
+	_channels.push_back(channel);
+}

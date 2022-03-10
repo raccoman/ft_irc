@@ -32,7 +32,7 @@ void CommandHandler::invoke(Client *client, const std::string &message)
 		if ((name == "PASS" || name == "NICK" || name == "USER") || (client->isRegistered() && !(name == "PASS" || name == "NICK" || name == "USER") )) {
 			command->execute(client, arguments);
 		}
-		else { std::cout << "ERROR: NOT REGISTERED" << std::endl; }
+		else { client->sendMessage("0 * : You need to be registered in order to do that."); }
 	}
 	catch (const std::out_of_range &e) {
 		char buffer[100];

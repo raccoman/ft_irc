@@ -2,7 +2,7 @@
 #include "network/Client.hpp"
 
 Client::Client(int fd, const pollfds_iterator &pollfd, const std::string &hostname, int port)
-	: _fd(fd), _pollfd(pollfd), _hostname(hostname), _port(port), _registered(false) {
+	: _fd(fd), _pollfd(pollfd), _hostname(hostname), _port(port), _registered(false), _channel(nullptr) {
 }
 
 Client::~Client() {}
