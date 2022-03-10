@@ -27,13 +27,13 @@ class Server
 	typedef std::vector<pollfd>::iterator pollfds_iterator;
 
 	int _sock;
-	const std::string _host;
-	const std::string _port;
-	const std::string _password;
-	std::vector<pollfd> _pollfds;
-	std::map<int, Client *> _clients;
-	std::vector<Channel *> _channels;
-	CommandHandler *_commandHandler;
+	const std::string		_host;
+	const std::string		_port;
+	const std::string		_password;
+	std::vector<pollfd>		_pollfds;
+	std::map<int, Client *>	_clients;
+	std::vector<Channel *>	_channels;
+	CommandHandler*			_commandHandler;
 
 public:
 	Server(const std::string &port, const std::string &password);

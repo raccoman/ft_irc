@@ -19,5 +19,10 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arguments) {
 		client->setChannel(_server->getChannel(channelName));
 		client->sendMessage("Joined Channel" + channelName);
 	}
-
+	else {
+		Channel* channel = _server->getChannel(channelName);
+		channel->addClient(client);
+		client->setChannel(channel);
+		client->sendMessage("Joined Channel" + channelName);
+	}
 }

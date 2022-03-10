@@ -1,8 +1,7 @@
 #include "network/Server.hpp"
 
 Server::Server(const std::string &port, const std::string &password)
-	: _host("127.0.0.1"), _port(port), _password(password)
-{
+	: _host("127.0.0.1"), _port(port), _password(password) {
 
 	_sock = newSocket(1);
 	_commandHandler = new CommandHandler(this);
@@ -19,34 +18,28 @@ void Server::start()
 
 	ft_log("Server listening...");
 
-	while (true)
-	{
+	while (true) {
 		// Loop waiting for incoming connects or for incoming data on any of the connected sockets.
 		if (poll(_pollfds.begin().base(), _pollfds.size(), -1) < 0)
 			throw std::runtime_error("Error while polling from fd.");
 
 		// One or more descriptors are readable. Need to determine which ones they are.
-		for (pollfds_iterator it = _pollfds.begin(); it != _pollfds.end(); it++)
-		{
+		for (pollfds_iterator it = _pollfds.begin(); it != _pollfds.end(); it++) {
 
 			if (it->revents == 0)
 				continue;
 
-			if ((it->revents & POLLHUP) == POLLHUP)
-			{
+			if ((it->revents & POLLHUP) == POLLHUP) {
 				onClientDisconnect(it->fd);
 				break;
 			}
 
-			if ((it->revents & POLLIN) == POLLIN)
-			{
+			if ((it->revents & POLLIN) == POLLIN) {
 
-				if (it->fd == _sock)
-				{
+				if (it->fd == _sock) {
 					onClientConnect();
 					break;
 				}
-
 				onClientMessage(it->fd);
 			}
 		}
@@ -77,7 +70,11 @@ void Server::onClientConnect()
 void Server::onClientDisconnect(int fd)
 {
 	Client *client = _clients.at(fd);
-	// TODO: Remove from channel ecc..
+	Channel *channel;
+
+	if ((channel = client->getChannel()) != nullptr) {
+		channel->removeClient(client);
+	}
 
 	char message[1000];
 	sprintf(message, "%s:%d has disconnected.", client->getHostname().c_str(), client->getPort());
@@ -106,8 +103,7 @@ std::string Server::readMessage(int fd)
 
 		bzero(buffer, 100);
 		length = recv(fd, buffer, 100, 0);
-		if (length < 0)
-		{
+		if (length < 0) {
 			if (errno != EWOULDBLOCK)
 				throw std::runtime_error("Error while reading buffer from client.");
 			break;
@@ -135,8 +131,7 @@ int Server::newSocket(int nonblocking)
 	 * allowing it to return any data that the system has in it's read buffer
 	 * for that socket, but, it won't wait for that data.
 	 */
-	if (nonblocking && fcntl(sockfd, F_SETFL, O_NONBLOCK) == -1)
-	{
+	if (nonblocking && fcntl(sockfd, F_SETFL, O_NONBLOCK) == -1) {
 		throw std::runtime_error("Error while setting socket to NON-BLOCKING.");
 	}
 
@@ -159,7 +154,6 @@ int Server::newSocket(int nonblocking)
 	// Let socket be able to listen for requests
 	if (listen(sockfd, MAX_CONNECTIONS) < 0)
 		throw std::runtime_error("Error while listening on socket.");
-
 	return sockfd;
 }
 

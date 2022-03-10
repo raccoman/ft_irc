@@ -24,10 +24,10 @@ void Channel::removeClient(Client *client) {
 	client_iter it;
 	if ((it = getClient(client)) != _clients.end()) {
 		_clients.erase(it);
-		std::cout << " Client kicked." << std::endl;
+		ft_log(" Client kicked.");
 //		TODO: reply to channel "[USERNAME] KICKED."
 	}
 	else {
-		std::cout << " Client doesn't exist." << std::endl;
+		ft_log(" Client doesn't exist.");
 	}
 }
