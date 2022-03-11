@@ -21,10 +21,15 @@ void CommandHandler::invoke(Client *client, const std::string &message) {
 
 	try {
 //		TODO: Some commands may not use arguments in that case the _command.at(name) fail. Need a fix
-		std::cout << name << std::endl;// DEBUG
+
+		ft_log(name);				// DEBUG
+
 		Command *command = _commands.at(name);
+
+		ft_log("DEBUG: _commands.at(name) PASSED! ✅");		// DEBUG
+
 		std::vector<std::string> arguments;
-		std::cout <<"debug |||" << std::endl;// DEBUG
+
 		std::string buf;
 		std::stringstream ss(message.substr(name.length(), message.length()));
 
