@@ -1,5 +1,5 @@
 #ifndef FT_IRC_SERVER_HPP
-#define FT_IRC_SERVER_HPP
+# define FT_IRC_SERVER_HPP
 
 class Server;
 
@@ -16,7 +16,6 @@ class Server;
 #include "commands/CommandHandler.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
-#include "logger.hpp"
 
 #define MAX_CONNECTIONS 1000
 #define MSG_DELIMITER "\n\r"

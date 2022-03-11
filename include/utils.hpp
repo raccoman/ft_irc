@@ -1,6 +1,10 @@
 #ifndef FT_IRC_UTILS_HPP
 #define FT_IRC_UTILS_HPP
 
+#include <iostream>
+#include <string>
+#include <time.h>
+
 // ERROR REPLIES
 #define ERR_NEEDMOREPARAMS(command) "461 * " command " :Not enough parameters"
 #define ERR_ALREADYREGISTERED "462 * :You may not reregister"
@@ -11,5 +15,19 @@
 
 // STANDARD REPLIES
 #define RPL_WELCOME(nick) ("001 * :Welcome " + (nick) + " to the ft_irc network")
+
+static void ft_log(const std::string &message)
+{
+	time_t rawtime;
+	struct tm *timeinfo;
+	char buffer[80];
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+
+	strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
+	std::string str(buffer);
+	std::cout << "[" << str << "] " << message << std::endl;
+};
 
 #endif //FT_IRC_UTILS_HPP

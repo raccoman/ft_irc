@@ -1,5 +1,5 @@
 #ifndef FT_IRC_CLIENT_HPP
-#define FT_IRC_CLIENT_HPP
+# define FT_IRC_CLIENT_HPP
 
 enum ClientState {
 	HANDSHAKE,
@@ -14,7 +14,7 @@ class Client;
 #include <string>
 #include <sys/poll.h>
 #include <sys/socket.h>
-#include "Utils.hpp"
+#include "utils.hpp"
 #include "Channel.hpp"
 
 class Client {
@@ -48,7 +48,7 @@ public:
 
 	int getPort() const { return _port; };
 
-	bool isRegistered() const { return _state == ClientState.PLAY; };
+	bool isRegistered() const { return _state == ::PLAY; };
 
 	std::string getNickname() const { return _nickname; };
 

@@ -3,7 +3,7 @@
 //
 #include "commands/Command.hpp"
 
-QuitCommand::QuitCommand(Server *server, bool auth) : Command(server, auth) {}
+QuitCommand::QuitCommand(Server *server, bool authRequired) : Command(server, authRequired) {}
 
 QuitCommand::~QuitCommand() {}
 

@@ -33,6 +33,7 @@ FILES =		main.cpp \
 			NickCommand.cpp \
 			PassCommand.cpp \
 			UserCommand.cpp \
+			QuitCommand.cpp \
 			JoinCommand.cpp
 
 #Srcs

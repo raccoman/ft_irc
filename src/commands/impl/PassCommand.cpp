@@ -21,5 +21,5 @@ void PassCommand::execute(Client *client, std::vector<std::string> arguments)
 		return;
 	}
 
-	client->setState(ClientState.LOGIN);
+	client->setState(::LOGIN);
 }

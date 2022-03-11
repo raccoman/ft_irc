@@ -16,7 +16,6 @@ protected:
 
 public:
 	explicit Command(Server *server, bool authRequired = true) : _server(server), _authRequired(authRequired) {};
-	//explicit Command(Server *server) : _server(server), _authRequired(true) {};
 	virtual ~Command(){};
 
 	bool authRequired() const { return _authRequired; };
