@@ -81,7 +81,8 @@ void Server::onClientDisconnect(int fd)
 	ft_log(message);
 
 	_pollfds.erase(client->getPollFD());
-	_clients.erase(fd);
+	if (client != nullptr)
+		_clients.erase(fd);
 	delete client;
 }
 
@@ -101,7 +102,9 @@ void Server::removeChannel(Channel *channel) {
 void Server::onClientMessage(int fd)
 {
 	Client *client = _clients.at(fd);
-	_commandHandler->invoke(client, readMessage(fd));
+	std::string message = readMessage(fd);
+//	std::cout << "[" << message << "length: " << message.length()  << "]" << std::endl;
+	_commandHandler->invoke(client, message);
 }
 
 std::string Server::readMessage(int fd)
@@ -111,11 +114,10 @@ std::string Server::readMessage(int fd)
 	ssize_t length;
 
 	bzero(buffer, 100);
-	while (!std::strstr(buffer, MSG_DELIMITER))
-	{
-
+	while (!std::strstr(buffer, MSG_DELIMITER)) {
 		bzero(buffer, 100);
 		length = recv(fd, buffer, 100, 0);
+
 		if (length < 0) {
 			if (errno != EWOULDBLOCK)
 				throw std::runtime_error("Error while reading buffer from client.");
@@ -123,7 +125,6 @@ std::string Server::readMessage(int fd)
 		}
 		message.append(buffer);
 	}
-
 	return message;
 }
 
