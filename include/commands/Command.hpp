@@ -11,13 +11,22 @@ class Command
 {
 
 protected:
-    Server *_server;
+	Server *_server;
 
 public:
-    Command(Server *server) : _server(server){};
-    virtual ~Command(){};
+	Command(Server *server) : _server(server){};
+	virtual ~Command(){};
 
-    virtual void execute(Client *client, std::vector<std::string> arguments) = 0;
+	virtual void execute(Client *client, std::vector<std::string> arguments) = 0;
+};
+
+class QuitCommand : public Command
+{
+public:
+	QuitCommand(Server *server);
+	~QuitCommand();
+
+	void execute(Client *client, std::vector<std::string> arguments);
 };
 
 class JoinCommand : public Command
@@ -32,28 +41,28 @@ public:
 class UserCommand : public Command
 {
 public:
-    UserCommand(Server *server);
-    ~UserCommand();
+	UserCommand(Server *server);
+	~UserCommand();
 
-    void execute(Client *client, std::vector<std::string> arguments);
+	void execute(Client *client, std::vector<std::string> arguments);
 };
 
 class NickCommand : public Command
 {
 public:
-    NickCommand(Server *server);
-    ~NickCommand();
+	NickCommand(Server *server);
+	~NickCommand();
 
-    void execute(Client *client, std::vector<std::string> arguments);
+	void execute(Client *client, std::vector<std::string> arguments);
 };
 
 class PassCommand : public Command
 {
 public:
-    PassCommand(Server *server);
-    ~PassCommand();
+	PassCommand(Server *server);
+	~PassCommand();
 
-    void execute(Client *client, std::vector<std::string> arguments);
+	void execute(Client *client, std::vector<std::string> arguments);
 };
 
 #endif // COMMAND_HPP

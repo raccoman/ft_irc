@@ -30,7 +30,7 @@ void Server::start()
 				continue;
 
 			if ((it->revents & POLLHUP) == POLLHUP) {
-				onClientDisconnect(it->fd);
+//				onClientDisconnect(it->fd);
 				break;
 			}
 
@@ -83,6 +83,12 @@ void Server::onClientDisconnect(int fd)
 	_pollfds.erase(client->getPollFD());
 	_clients.erase(fd);
 	delete client;
+}
+
+void Server::removeClient(Client *client) {
+	if (getClient(client->getNickname())){
+		_clients.erase(client->getPollFD()->fd);
+	}
 }
 
 void Server::onClientMessage(int fd)

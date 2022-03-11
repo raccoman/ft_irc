@@ -4,6 +4,7 @@ CommandHandler::CommandHandler(Server *server) : _server(server) {
 	_commands["PASS"] = new PassCommand(_server);
 	_commands["NICK"] = new NickCommand(_server);
 	_commands["USER"] = new UserCommand(_server);
+	_commands["QUIT"] = new QuitCommand(_server);
 
 	_commands["JOIN"] = new JoinCommand(_server);
 //	TODO: PART, QUIT, KICK commands to be implemented
@@ -19,16 +20,18 @@ void CommandHandler::invoke(Client *client, const std::string &message) {
 	std::transform(name.begin(), name.end(), name.begin(), ::toupper);
 
 	try {
+//		TODO: Some commands may not use arguments in that case the _command.at(name) fail. Need a fix
+		std::cout << name << std::endl;// DEBUG
 		Command *command = _commands.at(name);
-
-		std::string buf;
 		std::vector<std::string> arguments;
+		std::cout <<"debug |||" << std::endl;// DEBUG
+		std::string buf;
 		std::stringstream ss(message.substr(name.length(), message.length()));
 
-		while (ss >> buf)
+		while (ss >> buf) {
 			arguments.push_back(buf);
-
-		if ((name == "PASS" || name == "NICK" || name == "USER") || (client->isRegistered() && !(name == "PASS" || name == "NICK" || name == "USER") )) {
+		}
+		if (tryCommand(name) || (client->isRegistered() && !tryCommand(name) )) {
 			command->execute(client, arguments);
 		}
 		else { client->sendMessage("0 * : You need to be registered in order to do that."); }

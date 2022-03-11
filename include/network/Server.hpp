@@ -45,13 +45,16 @@ public:
 	Client *getClient(const std::string &nickname);
 	Channel* getChannel(const std::string &name);
 	void addChannel(const std::string &name, const std::string &password, Client *client);
+	void removeClient(Client *client);
+
+	void onClientDisconnect(int fd);
 
 private:
 	int newSocket(int nonblocking = 0);
 	void onClientConnect();
-	void onClientDisconnect(int fd);
 	void onClientMessage(int fd);
 	std::string readMessage(int fd);
+
 };
 
 #endif

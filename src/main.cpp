@@ -1,7 +1,6 @@
 #include "network/Server.hpp"
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 	try {
 		if (argc != 3) {
 			throw std::runtime_error("Usage: ./ircserv <port> <password>");

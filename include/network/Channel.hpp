@@ -23,10 +23,13 @@ public:
 	Channel(const std::string &name, const std::string &password, Client *admin);
 	~Channel();
 
+	Client* getAdmin() { return _admin; };
 	std::string getName() const { return _name; };
+	std::string getPassword() const { return _password; };
 	std::vector<Client *>::iterator getClient(Client *client);
-	void addClient(Client *newClient) { _clients.push_back(newClient); };
+
 	void removeClient(Client *client);
+	void addClient(Client *newClient) { _clients.push_back(newClient); };
 
 };
 
