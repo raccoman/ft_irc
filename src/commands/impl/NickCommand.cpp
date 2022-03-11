@@ -19,5 +19,4 @@ void NickCommand::execute(Client *client, std::vector<std::string> arguments) {
 	}
 
 	client->setNickname(nickname);
-	client->checkRegistered();
 }

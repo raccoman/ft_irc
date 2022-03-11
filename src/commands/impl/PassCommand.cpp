@@ -21,7 +21,5 @@ void PassCommand::execute(Client *client, std::vector<std::string> arguments)
 		return;
 	}
 
-	client->sendMessage("The PASS was correct");
-	client->setEntered(true);
-	client->checkRegistered();
+	client->setState(ClientState.LOGIN);
 }

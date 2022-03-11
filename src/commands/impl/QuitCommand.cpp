@@ -8,5 +8,5 @@ QuitCommand::QuitCommand(Server *server, bool auth) : Command(server, auth) {}
 QuitCommand::~QuitCommand() {}
 
 void QuitCommand::execute(Client *client, std::vector<std::string> arguments) {
-	_server->onClientDisconnect(client->getPollFD()->fd);
+	_server->onClientDisconnect(client->getFD());
 }
