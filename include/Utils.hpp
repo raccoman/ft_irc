@@ -12,4 +12,10 @@
 // STANDARD REPLIES
 #define RPL_WELCOME(nick) ("001 * :Welcome " + (nick) + " to the ft_irc network")
 
+static bool tryCommand(const std::string& name) {
+	if (name == "PASS" || name == "NICK" || name == "USER" || name == "QUIT")
+		return true;
+	return false;
+}
+
 #endif //FT_IRC_UTILS_HPP
