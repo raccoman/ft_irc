@@ -1,6 +1,6 @@
 #include "commands/Command.hpp"
 
-NickCommand::NickCommand(Server *server) : Command(server) {}
+NickCommand::NickCommand(Server *server, bool auth) : Command(server, auth) {}
 
 NickCommand::~NickCommand() {}
 

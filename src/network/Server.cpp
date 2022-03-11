@@ -7,9 +7,7 @@ Server::Server(const std::string &port, const std::string &password)
 	_commandHandler = new CommandHandler(this);
 }
 
-Server::~Server()
-{
-}
+Server::~Server() {}
 
 void Server::start()
 {

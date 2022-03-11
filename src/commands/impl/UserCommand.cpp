@@ -1,29 +1,21 @@
 #include "commands/Command.hpp"
 
-UserCommand::UserCommand(Server *server) : Command(server)
-{
-}
+UserCommand::UserCommand(Server *server, bool auth) : Command(server, auth) {}
 
-UserCommand::~UserCommand()
-{
-}
+UserCommand::~UserCommand() {}
 
-void UserCommand::execute(Client *client, std::vector<std::string> arguments)
-{
+void UserCommand::execute(Client *client, std::vector<std::string> arguments) {
 
-    if (client->isRegistered())
-    {
-        client->sendMessage(ERR_ALREADYREGISTERED);
-        return;
-    }
+	if (client->isRegistered()) {
+		client->sendMessage(ERR_ALREADYREGISTERED);
+		return;
+	}
 
-    if (arguments.size() < 4)
-    {
-        client->sendMessage(ERR_NEEDMOREPARAMS("USER"));
-        return;
-    }
-
-    client->setUsername(arguments[0]);
-    client->setRealName(arguments[3]);
-	client->checkRegistered();
+	if (arguments.size() < 4) {
+		client->sendMessage(ERR_NEEDMOREPARAMS("USER"));
+		return;
+	}
+	client->setUsername(arguments[0]);
+	client->setRealName(arguments[3]);
+	client->setState(ClientState.PLAY);
 }
