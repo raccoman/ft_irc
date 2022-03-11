@@ -46,8 +46,12 @@ public:
 	Channel* getChannel(const std::string &name);
 	void addChannel(const std::string &name, const std::string &password, Client *client);
 	void removeClient(Client *client);
+	void removeChannel(Channel *channel);
 
 	void onClientDisconnect(int fd);
+
+	void printChannels();// DEBUG
+	std::vector<Channel *>::iterator getChannelIterator(Channel *channel);
 
 private:
 	int newSocket(int nonblocking = 0);

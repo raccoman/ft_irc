@@ -25,6 +25,7 @@ public:
 
 	Client* getAdmin() { return _admin; };
 	std::string getName() const { return _name; };
+	bool checkEmptyClients() { return _clients.empty(); };
 	std::string getPassword() const { return _password; };
 	std::vector<Client *>::iterator getClient(Client *client);
 

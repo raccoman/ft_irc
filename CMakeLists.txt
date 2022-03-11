@@ -18,6 +18,6 @@ set(SOURCES
 		src/commands/impl/UserCommand.cpp
 		src/commands/impl/JoinCommand.cpp
 		src/commands/impl/QuitCommand.cpp
-		)
+        src/commands/impl/PartCommand.cpp)
 
 add_executable(ft_irc src/main.cpp ${SOURCES})

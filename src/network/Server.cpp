@@ -91,6 +91,13 @@ void Server::removeClient(Client *client) {
 	}
 }
 
+void Server::removeChannel(Channel *channel) {
+	if (getChannel(channel->getName())) {
+		_channels.erase(getChannelIterator(channel));
+		delete channel;
+	}
+}
+
 void Server::onClientMessage(int fd)
 {
 	Client *client = _clients.at(fd);
@@ -161,6 +168,20 @@ int Server::newSocket(int nonblocking)
 	if (listen(sockfd, MAX_CONNECTIONS) < 0)
 		throw std::runtime_error("Error while listening on socket.");
 	return sockfd;
+}
+
+void Server::printChannels() {
+	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++) {
+		ft_log((*it)->getName());
+	}
+} // DEBUG
+
+std::vector<Channel *>::iterator Server::getChannelIterator(Channel *channel){
+	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++) {
+		if ((*it) == channel)
+			return it;
+	}
+	return (_channels.end());
 }
 
 Channel* Server::getChannel(const std::string &name) {

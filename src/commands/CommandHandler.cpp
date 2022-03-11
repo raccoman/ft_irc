@@ -7,6 +7,7 @@ CommandHandler::CommandHandler(Server *server) : _server(server) {
 	_commands["QUIT"] = new QuitCommand(_server);
 
 	_commands["JOIN"] = new JoinCommand(_server);
+	_commands["PART"] = new PartCommand(_server);
 //	TODO: PART, QUIT, KICK commands to be implemented
 }
 

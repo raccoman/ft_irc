@@ -20,6 +20,15 @@ public:
 	virtual void execute(Client *client, std::vector<std::string> arguments) = 0;
 };
 
+class PartCommand : public Command
+{
+public:
+	PartCommand(Server *server);
+	~PartCommand();
+
+	void execute(Client *client, std::vector<std::string> arguments);
+};
+
 class QuitCommand : public Command
 {
 public:
