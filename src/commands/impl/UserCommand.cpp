@@ -18,4 +18,5 @@ void UserCommand::execute(Client *client, std::vector<std::string> arguments) {
 	client->setUsername(arguments[0]);
 	client->setRealName(arguments[3]);
 	client->setState(::PLAY);
+	client->sendMessage(RPL_WELCOME(client->getNickname()));
 }
