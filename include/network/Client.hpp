@@ -68,7 +68,8 @@ public:
 
 	void setChannel(Channel *channel) { _channel = channel; };
 
-	void sendMessage(const std::string &message);
+	void sendMessage(const std::string &message) const;
+	void welcome();
 };
 
 #endif

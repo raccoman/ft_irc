@@ -18,4 +18,5 @@ void NickCommand::execute(Client *client, std::vector<std::string> arguments) {
 		return;
 	}
 	client->setNickname(nickname);
+	client->welcome();
 }

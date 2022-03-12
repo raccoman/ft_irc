@@ -1,7 +1,7 @@
 #include "network/Server.hpp"
 
 Server::Server(const std::string &port, const std::string &password)
-	: _host("127.0.0.1"), _port(port), _password(password) {
+		: _host("127.0.0.1"), _port(port), _password(password) {
 
 	_sock = newSocket(1);
 	_commandHandler = new CommandHandler(this);
@@ -9,8 +9,7 @@ Server::Server(const std::string &port, const std::string &password)
 
 Server::~Server() {}
 
-void Server::start()
-{
+void Server::start() {
 	pollfd server_fd = {_sock, POLLIN, 0};
 	_pollfds.push_back(server_fd);
 
@@ -44,13 +43,12 @@ void Server::start()
 	}
 }
 
-void Server::onClientConnect()
-{
+void Server::onClientConnect() {
 	int fd;
-	sockaddr_in s_address;
+	sockaddr_in s_address = {};
 	socklen_t s_size = sizeof(s_address);
 
-	fd = accept(_sock, (sockaddr *)&s_address, &s_size);
+	fd = accept(_sock, (sockaddr *) &s_address, &s_size);
 	if (fd < 0)
 		throw std::runtime_error("Error while accepting new client.");
 
@@ -65,8 +63,7 @@ void Server::onClientConnect()
 	ft_log(message);
 }
 
-void Server::onClientDisconnect(int fd)
-{
+void Server::onClientDisconnect(int fd) {
 	Client *client = _clients.at(fd);
 	Channel *channel;
 
@@ -86,7 +83,7 @@ void Server::onClientDisconnect(int fd)
 }
 
 void Server::removeClient(Client *client) {
-	if (getClient(client->getNickname())){
+	if (getClient(client->getNickname())) {
 		_clients.erase(client->getPollFD()->fd);
 	}
 }
@@ -98,12 +95,9 @@ void Server::removeChannel(Channel *channel) {
 	}
 }
 
-void Server::onClientMessage(int fd)
-{
+void Server::onClientMessage(int fd) {
 	Client *client = _clients.at(fd);
-	std::string message = readMessage(fd);
-//	std::cout << "[" << message << "length: " << message.length()  << "]" << std::endl;
-	_commandHandler->invoke(client, message);
+	_commandHandler->invoke(client, readMessage(fd));
 }
 
 std::string Server::readMessage(int fd) {
@@ -149,7 +143,7 @@ int Server::newSocket(int nonblocking) {
 	struct sockaddr_in serv_address = {};
 
 	// Clear address structure, should prevent some segmentation fault and artifacts
-	bzero((char *)&serv_address, sizeof(serv_address));
+	bzero((char *) &serv_address, sizeof(serv_address));
 
 	/*
 	 * htons() convert unsigned short int to big-endian network byte order as expected from TCP protocol standards
@@ -159,7 +153,7 @@ int Server::newSocket(int nonblocking) {
 	serv_address.sin_port = htons(std::stoi(_port));
 
 	// Bind the socket to the current IP address on selected port
-	if (bind(sockfd, (struct sockaddr *)&serv_address, sizeof(serv_address)) < 0)
+	if (bind(sockfd, (struct sockaddr *) &serv_address, sizeof(serv_address)) < 0)
 		throw std::runtime_error("Error while binding socket.");
 
 	// Let socket be able to listen for requests
@@ -174,7 +168,7 @@ void Server::printChannels() {
 	}
 } // DEBUG
 
-std::vector<Channel *>::iterator Server::getChannelIterator(Channel *channel){
+std::vector<Channel *>::iterator Server::getChannelIterator(Channel *channel) {
 	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++) {
 		if ((*it) == channel)
 			return it;
@@ -182,7 +176,7 @@ std::vector<Channel *>::iterator Server::getChannelIterator(Channel *channel){
 	return (_channels.end());
 }
 
-Channel* Server::getChannel(const std::string &name) {
+Channel *Server::getChannel(const std::string &name) {
 	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++) {
 		if ((*it)->getName() == name) {
 			return *it;
