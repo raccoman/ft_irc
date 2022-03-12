@@ -29,6 +29,7 @@ public:
 	std::string getPassword() const { return _password; };
 	std::vector<Client *>::iterator getClient(Client *client);
 
+	void sendMessage(const std::string& message, const std::string& sender);
 	void removeClient(Client *client);
 	void addClient(Client *newClient) { _clients.push_back(newClient); };
 

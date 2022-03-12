@@ -31,3 +31,11 @@ void Channel::removeClient(Client *client) {
 		ft_log(" Client doesn't exist.");
 	}
 }
+
+void Channel::sendMessage(const std::string& message, const std::string& sender) {
+	for (std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+		char msg[100];
+		sprintf(msg, ":%s PRIVMSG #%s: %s.\n\r", sender.c_str(), _name.c_str(), message.c_str());
+		(*it)->sendMessage(msg);
+	}
+}

@@ -23,6 +23,15 @@ public:
 	virtual void execute(Client *client, std::vector<std::string> arguments) = 0;
 };
 
+class PrivMsgCommand : public Command
+{
+public:
+	PrivMsgCommand(Server *server);
+	~PrivMsgCommand();
+
+	void execute(Client *client, std::vector<std::string> arguments);
+};
+
 class PartCommand : public Command
 {
 public:
