@@ -4,8 +4,7 @@ PassCommand::PassCommand(Server *server, bool auth) : Command(server, auth) {}
 
 PassCommand::~PassCommand() {}
 
-void PassCommand::execute(Client *client, std::vector<std::string> arguments)
-{
+void PassCommand::execute(Client *client, std::vector<std::string> arguments) {
 	if (client->isRegistered()) {
 		client->sendMessage(ERR_ALREADYREGISTERED);
 		return;
@@ -21,5 +20,5 @@ void PassCommand::execute(Client *client, std::vector<std::string> arguments)
 		return;
 	}
 
-	client->setState(::LOGIN);
+	client->setState(LOGIN);
 }
