@@ -14,7 +14,7 @@ class Client;
 #include <string>
 #include <sys/poll.h>
 #include <sys/socket.h>
-#include "utils.hpp"
+#include "utils.h"
 #include "Channel.hpp"
 
 class Client {

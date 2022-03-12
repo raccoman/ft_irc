@@ -25,6 +25,7 @@ class Server
 
 	typedef std::vector<pollfd>::iterator pollfds_iterator;
 
+	int _running;
 	int _sock;
 	const std::string		_host;
 	const std::string		_port;
@@ -51,9 +52,8 @@ public:
 	void printChannels();// DEBUG
 	std::vector<Channel *>::iterator getChannelIterator(Channel *channel);
 
-private:
-	void onClientDisconnect(int fd);
 	int newSocket(int nonblocking = 0);
+	void onClientDisconnect(int fd);
 	void onClientConnect();
 	void onClientMessage(int fd);
 	std::string readMessage(int fd);

@@ -12,6 +12,8 @@ CommandHandler::CommandHandler(Server *server) : _server(server) {
 }
 
 CommandHandler::~CommandHandler() {
+	for (std::map<std::string, Command *>::iterator it = _commands.begin(); it != _commands.end(); it++)
+		delete it->second;
 }
 
 void CommandHandler::invoke(Client *client, const std::string &message) {

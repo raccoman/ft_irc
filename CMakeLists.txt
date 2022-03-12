@@ -7,7 +7,7 @@ include_directories(include/network)
 include_directories(include/commands)
 
 set(SOURCES
-		include/utils.hpp
+		include/utils.h
 		src/network/Server.cpp
 		src/network/Client.cpp
 		src/network/Channel.cpp

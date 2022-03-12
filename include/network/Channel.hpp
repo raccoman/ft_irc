@@ -14,8 +14,8 @@ class Channel {
 	typedef std::vector<Client *>::iterator client_iter;
 private:
 	std::string				_name;
-	Client *				_admin;
 	std::string				_password;
+	Client *				_admin;
 	std::vector<Client *>	_clients;
 
 

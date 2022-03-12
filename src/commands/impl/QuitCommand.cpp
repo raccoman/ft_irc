@@ -8,5 +8,9 @@ QuitCommand::QuitCommand(Server *server, bool authRequired) : Command(server, au
 QuitCommand::~QuitCommand() {}
 
 void QuitCommand::execute(Client *client, std::vector<std::string> arguments) {
-	client->sendMessage("ERROR :Connection closed successfully.");
+
+	(void)arguments;
+
+	client->sendMessage(ERR_FATAL("Connection closed"));
+	_server->onClientDisconnect(client->getFD());
 }
