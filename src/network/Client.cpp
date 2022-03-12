@@ -7,8 +7,7 @@ Client::Client(int fd, const pollfds_iterator &pollfd, const std::string &hostna
 
 Client::~Client() {}
 
-void Client::sendMessage(const std::string &message)
-{
+void Client::sendMessage(const std::string &message) const {
 	std::string buffer = message + "\n\r";
 
 	if (send(_fd, buffer.c_str(), buffer.length(), 0) < 0)

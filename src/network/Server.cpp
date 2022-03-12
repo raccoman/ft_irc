@@ -79,9 +79,10 @@ void Server::onClientDisconnect(int fd)
 	ft_log(message);
 
 	_pollfds.erase(client->getPollFD());
-	if (client != nullptr)
+	if (client != nullptr) {
 		_clients.erase(fd);
-	delete client;
+		delete client;
+	}
 }
 
 void Server::removeClient(Client *client) {

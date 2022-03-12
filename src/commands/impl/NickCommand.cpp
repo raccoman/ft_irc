@@ -17,6 +17,5 @@ void NickCommand::execute(Client *client, std::vector<std::string> arguments) {
 		client->sendMessage(ERR_NICKNAMEINUSE);
 		return;
 	}
-
 	client->setNickname(nickname);
 }
