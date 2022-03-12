@@ -105,8 +105,7 @@ void Server::onClientMessage(int fd)
 	_commandHandler->invoke(client, message);
 }
 
-std::string Server::readMessage(int fd)
-{
+std::string Server::readMessage(int fd) {
 	std::string message;
 	char buffer[100];
 	ssize_t length;
@@ -126,8 +125,7 @@ std::string Server::readMessage(int fd)
 	return message;
 }
 
-int Server::newSocket(int nonblocking)
-{
+int Server::newSocket(int nonblocking) {
 
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0)

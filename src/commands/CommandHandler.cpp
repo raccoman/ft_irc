@@ -6,7 +6,7 @@ CommandHandler::CommandHandler(Server *server) : _server(server) {
 	_commands["USER"] = new UserCommand(_server, false);
 	_commands["QUIT"] = new QuitCommand(_server, false);
 
-	//_commands["JOIN"] = new JoinCommand(_server);
+//	_commands["JOIN"] = new JoinCommand(_server);
 	//_commands["PART"] = new PartCommand(_server);
 //	TODO: PART, QUIT, KICK commands to be implemented
 }
@@ -16,32 +16,38 @@ CommandHandler::~CommandHandler() {
 
 void CommandHandler::invoke(Client *client, const std::string &message) {
 
-	std::string name = message.substr(0, message.find(' '));
-	std::transform(name.begin(), name.end(), name.begin(), ::toupper);
+	std::stringstream ssMessage(message);
+	std::string syntax;
 
-	try {
-//		TODO: Some commands may not use arguments in that case the _command.at(name) fail. Need a fix
+	while (std::getline(ssMessage, syntax)) {
 
-		Command *command = _commands.at(name);
+		syntax = syntax.substr(0, syntax.length() - 1);
+		std::string name = syntax.substr(0, syntax.find(' '));
 
-		std::vector<std::string> arguments;
+		try {
+			Command *command = _commands.at(name);
 
-		std::string buf;
-		std::stringstream ss(message.substr(name.length(), message.length()));
+			std::vector<std::string> arguments;
 
-		while (ss >> buf) {
-			arguments.push_back(buf);
+			std::string buf;
+			std::stringstream ss(syntax.substr(name.length(), syntax.length()));
+
+			while (ss >> buf) {
+				arguments.push_back(buf);
+			}
+
+			if (!client->isRegistered() && command->authRequired()) {
+				client->sendMessage("0 * : You need syntax be registered in order syntax do that.");
+				return;
+			}
+
+			command->execute(client, arguments);
+		}
+		catch (const std::out_of_range &e) {
+			char buffer[100];
+			sprintf(buffer, "%s:%d has sent unknown command: %s", client->getHostname().c_str(), client->getPort(), name.c_str());
+			ft_log(buffer);
 		}
 
-		if (!client->isRegistered() && command->authRequired()) {
-			client->sendMessage("0 * : You need to be registered in order to do that.");
-			return;
-		}
-		command->execute(client, arguments);
-	}
-	catch (const std::out_of_range &e) {
-		char buffer[100];
-		sprintf(buffer, "%s:%d has sent unknown command: %s", client->getHostname().c_str(), client->getPort(), name.c_str());
-		ft_log(buffer);
 	}
 }
