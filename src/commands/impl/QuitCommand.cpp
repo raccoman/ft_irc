@@ -8,5 +8,5 @@ QuitCommand::QuitCommand(Server *server, bool authRequired) : Command(server, au
 QuitCommand::~QuitCommand() {}
 
 void QuitCommand::execute(Client *client, std::vector<std::string> arguments) {
-	_server->onClientDisconnect(client->getFD());
+//	_server->onClientDisconnect(client->getFD());
 }

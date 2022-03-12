@@ -28,7 +28,7 @@ void Server::start()
 				continue;
 
 			if ((it->revents & POLLHUP) == POLLHUP) {
-//				onClientDisconnect(it->fd);
+				onClientDisconnect(it->fd);
 				break;
 			}
 
