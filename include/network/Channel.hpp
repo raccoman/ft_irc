@@ -2,7 +2,7 @@
 // Created by Roberto Boldini on 3/9/22.
 //
 #ifndef FT_IRC_CHANNEL_HPP
-#define FT_IRC_CHANNEL_HPP
+# define FT_IRC_CHANNEL_HPP
 
 class Channel;
 
@@ -12,6 +12,7 @@ class Channel;
 class Channel {
 
 	typedef std::vector<Client *>::iterator client_iter;
+
 private:
 	std::string				_name;
 	std::string				_password;
@@ -28,7 +29,7 @@ public:
 	bool checkEmptyClients() { return _clients.empty(); };
 	std::string getPassword() const { return _password; };
 	std::vector<Client *>::iterator getClient(Client *client);
-
+	void sendMessage(std::string const &message);
 	void sendMessage(const std::string& message, const std::string& sender);
 	void removeClient(Client *client);
 	void addClient(Client *newClient) { _clients.push_back(newClient); };

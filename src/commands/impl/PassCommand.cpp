@@ -15,6 +15,8 @@ void PassCommand::execute(Client *client, std::vector<std::string> arguments) {
 		return;
 	}
 
+	std::cout << arguments[0] << std::endl;
+
 	if (_server->getPassword() != arguments[0].substr(arguments[0][0] == ':' ? 1 : 0)) {
 		client->sendMessage(ERR_PASSWDMISMATCH);
 		return;

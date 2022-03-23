@@ -24,7 +24,7 @@ void CommandHandler::invoke(Client *client, const std::string &message) {
 
 	while (std::getline(ssMessage, syntax)) {
 
-		syntax = syntax.substr(0, syntax.length() - 1);
+		syntax = syntax.substr(0, syntax[syntax.length() - 1] == '\r' ? syntax.length() - 1 : syntax.length());
 		std::string name = syntax.substr(0, syntax.find(' '));
 
 		try {

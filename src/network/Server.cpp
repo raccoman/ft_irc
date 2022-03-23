@@ -3,7 +3,7 @@
 Server::Server(const std::string &port, const std::string &password)
 		: _running(1), _host("127.0.0.1"), _port(port), _password(password) {
 
-	_sock = newSocket(1);
+	_sock = newSocket();
 	_commandHandler = new CommandHandler(this);
 }
 
@@ -45,7 +45,7 @@ void Server::start() {
 	}
 }
 
-int Server::newSocket(int nonblocking) {
+int Server::newSocket() {
 
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0)
@@ -61,7 +61,7 @@ int Server::newSocket(int nonblocking) {
 	 * allowing it to return any data that the system has in it's read buffer
 	 * for that socket, but, it won't wait for that data.
 	 */
-	if (nonblocking && fcntl(sockfd, F_SETFL, O_NONBLOCK) == -1) {
+	if (fcntl(sockfd, F_SETFL, O_NONBLOCK) == -1) {
 		throw std::runtime_error("Error while setting socket to NON-BLOCKING.");
 	}
 
@@ -88,11 +88,16 @@ int Server::newSocket(int nonblocking) {
 }
 
 std::string Server::readMessage(int fd) {
-	std::string message;
+	std::string message = _messages.at(fd);
+
 	char buffer[100];
 	ssize_t length;
 
 	bzero(buffer, 100);
+
+//	EOF = -1
+//	MSG_EOF = 0x100
+
 	while (!std::strstr(buffer, MSG_DELIMITER)) {
 		bzero(buffer, 100);
 		length = recv(fd, buffer, 100, 0);
