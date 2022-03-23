@@ -18,6 +18,7 @@ void Server::start() {
 	ft_log("Server listening...");
 
 	while (_running) {
+
 		// Loop waiting for incoming connects or for incoming data on any of the connected sockets.
 		if (poll(_pollfds.begin().base(), _pollfds.size(), -1) < 0)
 			throw std::runtime_error("Error while polling from fd.");
@@ -39,6 +40,7 @@ void Server::start() {
 					onClientConnect();
 					break;
 				}
+
 				onClientMessage(it->fd);
 			}
 		}
@@ -88,27 +90,23 @@ int Server::newSocket() {
 }
 
 std::string Server::readMessage(int fd) {
-	std::string message = _messages.at(fd);
+
+	std::string message;
 
 	char buffer[100];
-	ssize_t length;
-
 	bzero(buffer, 100);
 
-//	EOF = -1
-//	MSG_EOF = 0x100
-
-	while (!std::strstr(buffer, MSG_DELIMITER)) {
+	while (!std::strstr(buffer, "\r\n")) {
 		bzero(buffer, 100);
-		length = recv(fd, buffer, 100, 0);
 
-		if (length < 0) {
+		if (recv(fd, buffer, 100, 0) < 0) {
 			if (errno != EWOULDBLOCK)
 				throw std::runtime_error("Error while reading buffer from client.");
-			break;
 		}
+
 		message.append(buffer);
 	}
+
 	return message;
 }
 
@@ -158,12 +156,10 @@ void Server::onClientDisconnect(int fd) {
 }
 
 void Server::onClientMessage(int fd) {
-	try {
-		Client *client = _clients.at(fd);
-		_commandHandler->invoke(client, readMessage(fd));
-	}
-	catch (const std::out_of_range &ex) {
-	}
+	clients_iterator it = _clients.find(fd);
+	if (it == _clients.end()) return;
+
+	_commandHandler->invoke(it->second, readMessage(fd));
 }
 
 Client *Server::getClient(const std::string &nickname) {

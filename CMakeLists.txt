@@ -7,17 +7,16 @@ include_directories(include/network)
 include_directories(include/commands)
 
 set(SOURCES
-		include/utils.h
 		src/network/Server.cpp
 		src/network/Client.cpp
 		src/network/Channel.cpp
-		include/network/Channel.hpp
 		src/commands/CommandHandler.cpp
 		src/commands/impl/NickCommand.cpp
 		src/commands/impl/PassCommand.cpp
 		src/commands/impl/UserCommand.cpp
 		src/commands/impl/JoinCommand.cpp
 		src/commands/impl/QuitCommand.cpp
-        src/commands/impl/PartCommand.cpp src/commands/impl/PrivMsgCommand.cpp)
+        src/commands/impl/PartCommand.cpp
+		src/commands/impl/PrivMsgCommand.cpp)
 
 add_executable(ft_irc src/main.cpp ${SOURCES})

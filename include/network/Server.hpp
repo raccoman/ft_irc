@@ -18,12 +18,12 @@ class Server;
 #include "Channel.hpp"
 
 #define MAX_CONNECTIONS 1000
-#define MSG_DELIMITER "\n\r"
 
 class Server
 {
 
 	typedef std::vector<pollfd>::iterator pollfds_iterator;
+	typedef std::map<int, Client *>::iterator clients_iterator;
 
 	int							_running;
 	int							_sock;
@@ -32,7 +32,6 @@ class Server
 	const std::string			_password;
 	std::vector<pollfd>			_pollfds;
 	std::map<int, Client *>		_clients;
-	std::map<int, std::string>	_messages;
 	std::vector<Channel *>		_channels;
 	CommandHandler*				_commandHandler;
 
@@ -44,9 +43,9 @@ public:
 
 	std::string getPassword() const { return _password; };
 	Client *getClient(const std::string &nickname);
+
 	Channel* getChannel(const std::string &name);
 	void addChannel(const std::string &name, const std::string &password, Client *client);
-	void removeClient(Client *client);
 	void removeChannel(Channel *channel);
 
 
