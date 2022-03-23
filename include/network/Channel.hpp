@@ -11,7 +11,7 @@ class Channel;
 
 class Channel {
 
-	typedef std::vector<Client *>::iterator client_iter;
+	typedef std::vector<Client *>::iterator clients_iterator;
 
 private:
 	std::string				_name;
@@ -26,13 +26,14 @@ public:
 
 	Client* getAdmin() { return _admin; };
 	std::string getName() const { return _name; };
-	bool checkEmptyClients() { return _clients.empty(); };
 	std::string getPassword() const { return _password; };
-	std::vector<Client *>::iterator getClient(Client *client);
-	void sendMessage(std::string const &message);
-	void sendMessage(const std::string& message, const std::string& sender);
+	std::vector<Client *> getClients() const { return _clients; };
+	std::vector<std::string> getNicknames();
+
+	void broadcast(std::string const &message);
+	//void sendMessage(const std::string& message, const std::string& sender);
 	void removeClient(Client *client);
-	void addClient(Client *newClient) { _clients.push_back(newClient); };
+	void addClient(Client *client) { _clients.push_back(client); };
 
 };
 

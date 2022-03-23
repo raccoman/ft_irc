@@ -8,18 +8,26 @@ PartCommand::PartCommand(Server *server) : Command(server) {}
 
 PartCommand::~PartCommand() {}
 
+// format: PART <channel>{,<channel>} [<reason>]
 void PartCommand::execute(Client *client, std::vector<std::string> arguments) {
-	Channel	*channel = client->getChannel();
 
-	if (channel->getName() == arguments[0]) {
-		ft_log("");
-//		std::cout << "leaving channel #" << channel->getName() << std::endl;// DEBUG
-
-		client->setChannel(nullptr);
-		channel->removeClient(client);
-		if (channel->checkEmptyClients()) {
-			_server->removeChannel(channel);
-		}
+	if (arguments.empty()) {
+		client->sendMessage(ERR_NEEDMOREPARAMS("PART"));
+		return;
 	}
-//	_server->printChannels();// DEBUG
+
+	std::string name = arguments[0];
+
+	Channel *channel = _server->getChannel(name);
+	if (!channel) {
+		client->sendMessage(ERR_NOSUCHCHANNEL);
+		return;
+	}
+
+	if (!client->getChannel() || client->getChannel()->getName() != name) {
+		client->sendMessage(ERR_NOTONCHANNEL);
+		return;
+	}
+
+	client->leave();
 }

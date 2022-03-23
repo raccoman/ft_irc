@@ -24,6 +24,7 @@ class Server
 
 	typedef std::vector<pollfd>::iterator pollfds_iterator;
 	typedef std::map<int, Client *>::iterator clients_iterator;
+	typedef std::vector<Channel *>::iterator channels_iterator;
 
 	int							_running;
 	int							_sock;
@@ -45,19 +46,13 @@ public:
 	Client *getClient(const std::string &nickname);
 
 	Channel* getChannel(const std::string &name);
-	void addChannel(const std::string &name, const std::string &password, Client *client);
-	void removeChannel(Channel *channel);
-
-
-	void printChannels();// DEBUG
-	std::vector<Channel *>::iterator getChannelIterator(Channel *channel);
+	Channel* createChannel(const std::string &name, const std::string &password, Client *client);
 
 	int newSocket();
 	void onClientDisconnect(int fd);
 	void onClientConnect();
 	void onClientMessage(int fd);
 	std::string readMessage(int fd);
-
 };
 
 #endif

@@ -66,11 +66,13 @@ public:
 
 	void setState(ClientState state) { _state = state; };
 
-	void setChannel(Channel *channel) { _channel = channel; };
-
 	void sendMessage(const std::string &message) const;
 
 	void welcome();
+
+	void join(Channel *channel);
+
+	void leave();
 };
 
 #endif

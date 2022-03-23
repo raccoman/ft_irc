@@ -5,6 +5,7 @@ PassCommand::PassCommand(Server *server, bool auth) : Command(server, auth) {}
 PassCommand::~PassCommand() {}
 
 void PassCommand::execute(Client *client, std::vector<std::string> arguments) {
+
 	if (client->isRegistered()) {
 		client->sendMessage(ERR_ALREADYREGISTERED);
 		return;
@@ -14,8 +15,6 @@ void PassCommand::execute(Client *client, std::vector<std::string> arguments) {
 		client->sendMessage(ERR_NEEDMOREPARAMS("PASS"));
 		return;
 	}
-
-	std::cout << arguments[0] << std::endl;
 
 	if (_server->getPassword() != arguments[0].substr(arguments[0][0] == ':' ? 1 : 0)) {
 		client->sendMessage(ERR_PASSWDMISMATCH);

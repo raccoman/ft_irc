@@ -4,28 +4,32 @@ JoinCommand::JoinCommand(Server *server) : Command(server) {}
 
 JoinCommand::~JoinCommand() {}
 
+// format : JOIN <channel>{,<channel>} [<key>{,<key>}]
 void JoinCommand::execute(Client *client, std::vector<std::string> arguments) {
 
-	std::string channelName = arguments[0];
-	ft_log(channelName);
-	std::string channelPassword = arguments[1];
-	ft_log(channelPassword);
-
-	if (client->getChannel() !=  nullptr) {
-		client->sendMessage(ERR_TOOMANYCHANNELS(client->getNickname()));
-		ft_log("ERROR: Channel already exists.");
+	if (arguments.empty()) {
+		client->sendMessage(ERR_NEEDMOREPARAMS("PASS"));
 		return;
 	}
 
-	if (_server->getChannel(channelName) == nullptr) {
-		_server->addChannel(channelName, channelPassword, client);
-		client->setChannel(_server->getChannel(channelName));
-		client->sendMessage("Created Channel " + channelName);
+	std::string name = arguments[0];
+	std::string password = arguments.size() > 1 ? arguments[1] : "";
+
+	Channel *channel = client->getChannel();
+
+	if (channel) {
+		client->sendMessage(ERR_TOOMANYCHANNELS);
+		return;
 	}
-	else {
-		Channel* channel = _server->getChannel(channelName);
-		channel->addClient(client);
-		client->setChannel(channel);
-		client->sendMessage("Joined Channel " + channelName);
+
+	channel = _server->getChannel(name);
+	if (!channel)
+		channel = _server->createChannel(name, password, client);
+
+	if (channel->getPassword() != password) {
+		client->sendMessage(ERR_BADCHANNELKEY);
+		return;
 	}
+
+	client->join(channel);
 }

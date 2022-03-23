@@ -135,10 +135,7 @@ void Server::onClientDisconnect(int fd) {
 	try {
 
 		Client *client = _clients.at(fd);
-
-		Channel *channel = client->getChannel();
-		if (channel)
-			channel->removeClient(client);
+		client->leave();
 
 		char message[1000];
 		sprintf(message, "%s:%d has disconnected.", client->getHostname().c_str(), client->getPort());
@@ -151,8 +148,8 @@ void Server::onClientDisconnect(int fd) {
 	catch (const std::out_of_range &ex) {
 	}
 
-	if (_clients.empty())
-		_running = 0;
+	//if (_clients.empty())
+	//	_running = 0;
 }
 
 void Server::onClientMessage(int fd) {
@@ -170,37 +167,19 @@ Client *Server::getClient(const std::string &nickname) {
 	return nullptr;
 }
 
-void Server::removeChannel(Channel *channel) {
-	if (getChannel(channel->getName())) {
-		_channels.erase(getChannelIterator(channel));
-		delete channel;
-	}
-}
-
-void Server::printChannels() {
-	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++) {
-		ft_log((*it)->getName());
-	}
-} // DEBUG
-
-std::vector<Channel *>::iterator Server::getChannelIterator(Channel *channel) {
-	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++) {
-		if ((*it) == channel)
-			return it;
-	}
-	return (_channels.end());
-}
-
 Channel *Server::getChannel(const std::string &name) {
-	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++) {
-		if ((*it)->getName() == name) {
-			return *it;
-		}
-	}
+
+	for (channels_iterator it = _channels.begin(); it != _channels.end(); it++)
+		if (it.operator*()->getName() == name)
+			return it.operator*();
+
 	return nullptr;
 }
 
-void Server::addChannel(const std::string &name, const std::string &password, Client *client) {
+Channel *Server::createChannel(const std::string &name, const std::string &password, Client *client) {
+
 	Channel *channel = new Channel(name, password, client);
 	_channels.push_back(channel);
+
+	return channel;
 }

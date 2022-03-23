@@ -10,7 +10,10 @@ PrivMsgCommand::~PrivMsgCommand() {};
 
 void PrivMsgCommand::execute(Client *client, std::vector<std::string> arguments) {
 
-	if (arguments[0].empty() || arguments[1].empty()) {
+	(void)client;
+	(void)arguments;
+
+	/*if (arguments[0].empty() || arguments[1].empty()) {
 		client->sendMessage(ERR_NEEDMOREPARAMS("PRIVMSG"));
 		return;
 	}
@@ -33,5 +36,5 @@ void PrivMsgCommand::execute(Client *client, std::vector<std::string> arguments)
 		dest->sendMessage(fullMessage);
 		return;
 	}
-	client->sendMessage(ERR_NOSUCHNICK);
+	client->sendMessage(ERR_NOSUCHNICK);*/
 }
