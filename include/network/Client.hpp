@@ -73,6 +73,8 @@ public:
 	void join(Channel *channel);
 
 	void leave();
+
+	void kick(std::string op, Channel *channel);
 };
 
 #endif

@@ -58,3 +58,16 @@ void Client::leave() {
 
 	_channel = nullptr;
 }
+
+void Client::kick(std::string op, Channel *channel) {
+	// kick client from channel
+	if (!_channel) return;
+
+	channel->removeClient(this);
+
+	char message[100];
+	sprintf(message, "%s kicked %s from %s.", op.c_str(), _nickname.c_str(), _channel->getName().c_str());
+	ft_log(message);
+
+	_channel = nullptr;
+}

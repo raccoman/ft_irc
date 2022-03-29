@@ -15,6 +15,8 @@
 #define ERR_NOTONCHANNEL						"442 * :You're not on that channel"
 #define ERR_NOSUCHCHANNEL						"403 * :No such channel"
 #define ERR_BADCHANNELKEY						"475 * :Cannot join channel (+k)"
+#define ERR_CHANOPRIVSNEEDED					"482 * :You're not channel operator"
+#define ERR_USERNOTINCHANNEL					"441 * :They aren't on that channel"
 #define ERR_FATAL(message)						"ERROR :" message
 
 // PRIVMSG ERRORS

@@ -86,4 +86,13 @@ public:
 	void execute(Client *client, std::vector<std::string> arguments);
 };
 
+class KickCommand : public Command
+{
+public:
+	KickCommand(Server *server, bool authRequired);
+	~KickCommand();
+
+	void execute(Client *chanop, std::vector<std::string> arguments);
+};
+
 #endif // COMMAND_HPP
