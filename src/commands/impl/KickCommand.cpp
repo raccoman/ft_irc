@@ -9,10 +9,10 @@ KickCommand::KickCommand(Server *server, bool authRequired) : Command(server) {}
 KickCommand::~KickCommand() {}
 
 // format: KICK <channel> <user> *( "," <user> ) [<comment>]
-void KickCommand::execute(Client *chanop, std::vector<std::string> arguments)
+void KickCommand::execute(Client *client, std::vector<std::string> arguments)
 {
 	if (arguments.size() < 2) {
-		chanop->sendMessage(ERR_NEEDMOREPARAMS("KICK"));
+		client->sendMessage(ERR_NEEDMOREPARAMS("KICK"));
 		return;
 	}
 
@@ -23,17 +23,24 @@ void KickCommand::execute(Client *chanop, std::vector<std::string> arguments)
 
 	// if <channel doesn't exist ERROR
 	if (!channel) {
-		chanop->sendMessage(ERR_NOSUCHCHANNEL);
+		client->sendMessage(ERR_NOSUCHCHANNEL);
 		return;
 	}
 	// if user is not chanop command INVALID
-	if (chanop != channel->getAdmin()) {
-		chanop->sendMessage(ERR_CHANOPRIVSNEEDED);
-		return;
+	for (std::vector<Client *>::iterator ops = channel->getChanops().begin(); ops != channel->getChanops().end(); ops++) {
+		if (client == *ops || client == channel->getAdmin()) {
+			inChannel = true
+			break;
+		}
 	}
+	if (!inChannel) {
+		client->sendMessage(ERR_CHANOPRIVSNEEDED);
+	}
+	inChannel = false;
+
 	// if chanop is not on <channel> ERROR
-	if (channel != chanop->getChannel()) {
-		chanop->sendMessage(ERR_NOTONCHANNEL);
+	if (channel != client->getChannel()) {
+		client->sendMessage(ERR_NOTONCHANNEL);
 		return;
 	}
 	// if <user> is not in <channel> ERROR
@@ -42,11 +49,11 @@ void KickCommand::execute(Client *chanop, std::vector<std::string> arguments)
 		kicked = *list;
 		if (arguments[1] == kicked->getNickname()) {
 			inChannel = true;
-			kicked->kick(chanop->getNickname(), channel);
+			kicked->kick(client->getNickname(), channel);
 		}
 	}
 	if (!inChannel) {
-		chanop->sendMessage(ERR_USERNOTINCHANNEL);
+		client->sendMessage(ERR_USERNOTINCHANNEL);
 		return;
 	}
 }

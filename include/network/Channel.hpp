@@ -17,6 +17,7 @@ private:
 	std::string				_name;
 	std::string				_password;
 	Client *				_admin;
+	std::vector<Client *>	_chanops;
 	std::vector<Client *>	_clients;
 
 
@@ -28,6 +29,7 @@ public:
 	std::string getName() const { return _name; };
 	std::string getPassword() const { return _password; };
 	std::vector<Client *> getClients() const { return _clients; };
+	std::vector<Client *> getChanops() const { return _chanops; };
 	std::vector<std::string> getNicknames();
 
 	void broadcast(std::string const &message);
