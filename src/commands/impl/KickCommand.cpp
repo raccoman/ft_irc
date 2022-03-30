@@ -29,7 +29,7 @@ void KickCommand::execute(Client *client, std::vector<std::string> arguments)
 	// if user is not chanop command INVALID
 	for (std::vector<Client *>::iterator ops = channel->getChanops().begin(); ops != channel->getChanops().end(); ops++) {
 		if (client == *ops || client == channel->getAdmin()) {
-			inChannel = true
+			inChannel = true;
 			break;
 		}
 	}
