@@ -36,7 +36,9 @@ FILES =		main.cpp \
 			QuitCommand.cpp \
 			JoinCommand.cpp \
 			PrivMsgCommand.cpp \
-			PartCommand.cpp
+			PartCommand.cpp \
+			KickCommand.cpp \
+			TopicCommand.cpp
 
 #Srcs
 SRCS =			$(foreach FILE, $(FILES), $(shell find $(SOURCES_DIR) -name $(FILE)))

@@ -6,6 +6,7 @@ CommandHandler::CommandHandler(Server *server) : _server(server) {
 	_commands["USER"] = new UserCommand(_server, false);
 	_commands["QUIT"] = new QuitCommand(_server, false);
 	_commands["KICK"] = new KickCommand(_server, false);
+	_commands["TOPIC"] = new TopicCommand(_server, false);
 
 	_commands["JOIN"] = new JoinCommand(_server);
 	_commands["PRIVMSG"] = new PrivMsgCommand(_server);

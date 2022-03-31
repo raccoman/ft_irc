@@ -95,4 +95,13 @@ public:
 	void execute(Client *client, std::vector<std::string> arguments);
 };
 
+class TopicCommand : public Command
+{
+public:
+	TopicCommand(Server *server, bool authRequired);
+	~TopicCommand();
+
+	void execute(Client *client, std::vector<std::string> arguments);
+};
+
 #endif // COMMAND_HPP

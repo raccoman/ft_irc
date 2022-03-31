@@ -27,6 +27,9 @@
 #define RPL_JOIN(client, channel)				":" + client + " JOIN :" + channel
 #define RPL_NAMREPLY(client, channel, admins)	"353 * " + client + " = " + channel + " :" + admins
 #define RPL_ENDOFNAMES(client, channel)			"366 * " + client + " " + channel + " :End of /NAMES list."
+#define RPL_NOTOPIC(client, channel)			"331 * " + client + " " + channel + " :No topic is set"
+#define RPL_TOPIC(client, channel, topic)		"332 * " + client + " " + channel + " :" + topic
+#define RPL_TOPICWHOTIME(client, channel, nick, setat)	"333 * " + client + " " + channel + " " + nick + " " + setat
 
 static inline void ft_log(const std::string &message) {
 	time_t rawtime;
@@ -39,6 +42,19 @@ static inline void ft_log(const std::string &message) {
 	strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
 	std::string str(buffer);
 	std::cout << "[" << str << "] " << message << std::endl;
+};
+
+static inline std::string ft_getLog() {
+	time_t rawtime;
+	struct tm *timeinfo;
+	char buffer[80];
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+
+	strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
+	std::string str(buffer);
+	return (str);
 };
 
 #endif //FT_IRC_UTILS_H
