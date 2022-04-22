@@ -38,7 +38,7 @@ FILES =		main.cpp \
 			PrivMsgCommand.cpp \
 			PartCommand.cpp \
 			KickCommand.cpp \
-			TopicCommand.cpp
+			PingCommand.cpp
 
 #Srcs
 SRCS =			$(foreach FILE, $(FILES), $(shell find $(SOURCES_DIR) -name $(FILE)))

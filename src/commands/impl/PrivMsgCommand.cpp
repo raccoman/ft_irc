@@ -4,37 +4,39 @@
 
 #include "commands/Command.hpp"
 
-PrivMsgCommand::PrivMsgCommand(Server *server): Command(server) {};
+PrivMsgCommand::PrivMsgCommand(Server *server) : Command(server) {};
 
 PrivMsgCommand::~PrivMsgCommand() {};
 
 void PrivMsgCommand::execute(Client *client, std::vector<std::string> arguments) {
 
-	(void)client;
-	(void)arguments;
-
-	/*if (arguments[0].empty() || arguments[1].empty()) {
+	if (arguments.size() < 2 || arguments[0].empty() || arguments[1].empty()) {
 		client->sendMessage(ERR_NEEDMOREPARAMS("PRIVMSG"));
 		return;
 	}
-	std::string fullMessage;
+
+	std::string target = arguments.at(0);
+	std::string message;
+
 	for (std::vector<std::string>::iterator it = arguments.begin() + 1; it != arguments.end(); it++) {
-		fullMessage.append(*it + " ");
+		message.append(*it + " ");
 	}
 
-	if (arguments[0][0] == '#') {
-		Channel *channel;
-		if ((channel = client->getChannel()) != nullptr) {
-			channel->sendMessage(fullMessage, client->getNickname());
-			return;
-		}
-		client->sendMessage(ERR_NOSUCHCHANNEL);
-	}
+	message = message.substr(1);
 
-	Client *dest;
-	if ((dest = _server->getClient(arguments[0])) != nullptr) {
-		dest->sendMessage(fullMessage);
+	if (target.at(0) == '#') {
+
+		Channel *channel = client->getChannel();
+		if (!channel)
+			client->sendMessage(ERR_NOSUCHCHANNEL);
+
+		channel->broadcast(RPL_PRIVMSG(client->getNickname(), target, message), client);
 		return;
 	}
-	client->sendMessage(ERR_NOSUCHNICK);*/
+
+	Client *dest = _server->getClient(target);
+	if (!dest)
+		client->sendMessage(ERR_NOSUCHNICK);
+
+	dest->sendMessage(RPL_PRIVMSG(client->getNickname(), target, message));
 }

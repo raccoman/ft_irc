@@ -50,6 +50,7 @@ void Client::leave() {
 
 	if (!_channel) return;
 
+	_channel->broadcast(RPL_PART(_nickname, _channel->getName()));
 	_channel->removeClient(this);
 
 	char message[100];

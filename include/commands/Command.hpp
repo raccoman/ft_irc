@@ -4,6 +4,7 @@
 class Command;
 
 #include <string>
+#include <numeric>
 #include "network/Client.hpp"
 #include "network/Server.hpp"
 
@@ -89,17 +90,17 @@ public:
 class KickCommand : public Command
 {
 public:
-	KickCommand(Server *server, bool authRequired);
+	KickCommand(Server *server);
 	~KickCommand();
 
 	void execute(Client *client, std::vector<std::string> arguments);
 };
 
-class TopicCommand : public Command
+class PingCommand : public Command
 {
 public:
-	TopicCommand(Server *server, bool authRequired);
-	~TopicCommand();
+	PingCommand(Server *server);
+	~PingCommand();
 
 	void execute(Client *client, std::vector<std::string> arguments);
 };

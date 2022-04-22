@@ -17,6 +17,6 @@ set(SOURCES
 		src/commands/impl/JoinCommand.cpp
 		src/commands/impl/QuitCommand.cpp
         src/commands/impl/PartCommand.cpp
-		src/commands/impl/PrivMsgCommand.cpp src/commands/impl/KickCommand.cpp)
+		src/commands/impl/PrivMsgCommand.cpp src/commands/impl/KickCommand.cpp src/commands/impl/PingCommand.cpp)
 
 add_executable(ft_irc src/main.cpp ${SOURCES})

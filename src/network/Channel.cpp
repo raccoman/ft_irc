@@ -5,7 +5,7 @@
 #include "network/Channel.hpp"
 
 Channel::Channel(const std::string &name, const std::string &password, Client *admin)
-	: _name(name), _password(password), _admin(admin), _topic("") {
+		: _name(name), _password(password), _admin(admin) {
 }
 
 Channel::~Channel() {}
@@ -24,6 +24,16 @@ std::vector<std::string> Channel::getNicknames() {
 void Channel::broadcast(const std::string &message) {
 	for (clients_iterator it = _clients.begin(); it != _clients.end(); it++)
 		(*it)->sendMessage(message);
+}
+
+void Channel::broadcast(const std::string &message, Client *exclude) {
+	for (clients_iterator it = _clients.begin(); it != _clients.end(); it++) {
+
+		if (*it == exclude)
+			continue;
+
+		(*it)->sendMessage(message);
+	}
 }
 
 void Channel::removeClient(Client *client) {

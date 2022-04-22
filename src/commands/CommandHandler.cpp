@@ -5,12 +5,13 @@ CommandHandler::CommandHandler(Server *server) : _server(server) {
 	_commands["NICK"] = new NickCommand(_server, false);
 	_commands["USER"] = new UserCommand(_server, false);
 	_commands["QUIT"] = new QuitCommand(_server, false);
-	_commands["KICK"] = new KickCommand(_server, false);
-	_commands["TOPIC"] = new TopicCommand(_server, false);
 
+	_commands["PING"] = new PingCommand(_server);
 	_commands["JOIN"] = new JoinCommand(_server);
-	_commands["PRIVMSG"] = new PrivMsgCommand(_server);
 	_commands["PART"] = new PartCommand(_server);
+	_commands["KICK"] = new KickCommand(_server);
+
+	_commands["PRIVMSG"] = new PrivMsgCommand(_server);
 //	TODO: PART, QUIT, KICK commands to be implemented
 }
 
@@ -46,11 +47,12 @@ void CommandHandler::invoke(Client *client, const std::string &message) {
 				return;
 			}
 
+			std::cout << name << std::endl;
 			command->execute(client, arguments);
 		}
 		catch (const std::out_of_range &e) {
 			char buffer[100];
-			sprintf(buffer, "%s:%d has sent unknown command: %s", client->getHostname().c_str(), client->getPort(), name.c_str());
+			sprintf(buffer, "%s:%d has sent unknown command: %s", client->getHostname().c_str(), client->getPort(),name.c_str());
 			ft_log(buffer);
 		}
 
