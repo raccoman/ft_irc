@@ -30,7 +30,6 @@ void Client::welcome() {
 	_state = PLAY;
 
 	reply(RPL_WELCOME(_nickname));
-	//TODO: Maybe add replies 2, 3 and 4
 
 	char message[100];
 	sprintf(message, "%s:%d is now known as %s.", _hostname.c_str(), _port, _nickname.c_str());

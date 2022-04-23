@@ -17,7 +17,7 @@ class Channel {
 private:
 	std::string				_name;
 	std::string				_password;
-	Client *				_admin;
+	Client					*_admin;
 	std::vector<Client *>	_clients;
 
 public:
