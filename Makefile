@@ -63,7 +63,7 @@ fclean: clean
 	@$(RM) $(NAME)
 
 run: re
-	./$(NAME) 25565 password
+	./$(NAME) 3000 password
 
 re: fclean all clean
 

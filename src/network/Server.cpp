@@ -30,7 +30,7 @@ void Server::start() {
 				continue;
 
 			if ((it->revents & POLLHUP) == POLLHUP) {
-				onClientDisconnect(it->fd);
+				//onClientDisconnect(it->fd);
 				break;
 			}
 
@@ -123,10 +123,11 @@ void Server::onClientConnect() {
 	_pollfds.push_back(pollfd);
 
 	char hostname[NI_MAXHOST];
-	if (getnameinfo((struct sockaddr *) &s_address, sizeof(s_address), hostname, NI_MAXHOST, NULL, 0, NI_NUMERICSERV) != 0)
-		throw std::runtime_error("Error while getnameinfo on new client.");
+	if (getnameinfo((struct sockaddr *) &s_address, sizeof(s_address), hostname, NI_MAXHOST, NULL, 0, NI_NUMERICSERV) !=
+		0)
+		throw std::runtime_error("Error while getting hostname on new client.");
 
-	Client *client = new Client(fd, _pollfds.end() - 1, hostname, ntohs(s_address.sin_port));
+	Client *client = new Client(fd, hostname, ntohs(s_address.sin_port));
 	_clients.insert(std::make_pair(fd, client));
 
 	char message[1000];
@@ -145,15 +146,20 @@ void Server::onClientDisconnect(int fd) {
 		sprintf(message, "%s:%d has disconnected.", client->getHostname().c_str(), client->getPort());
 		ft_log(message);
 
-		_pollfds.erase(client->getPollFD());
 		_clients.erase(fd);
+
+		for (pollfds_iterator it = _pollfds.begin(); it != _pollfds.end(); it++) {
+			if (it->fd != fd)
+				continue;
+			_pollfds.erase(it);
+			close(fd);
+			break;
+		}
+
 		delete client;
 	}
 	catch (const std::out_of_range &ex) {
 	}
-
-	//if (_clients.empty())
-	//	_running = 0;
 }
 
 void Server::onClientMessage(int fd) {

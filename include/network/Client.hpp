@@ -23,27 +23,23 @@ class Client {
 
 private:
 	int _fd;
-	pollfds_iterator _pollfd;
 	std::string _hostname;
 	int _port;
 
 	std::string _nickname;
 	std::string _username;
 	std::string _realname;
-	std::string _prefix;
 
 	ClientState _state;
 
 	Channel *_channel;
 
 public:
-	Client(int fd, const pollfds_iterator &pollfd, const std::string &hostname, int port);
+	Client(int fd, const std::string &hostname, int port);
 
 	~Client();
 
 	int getFD() const { return _fd; };
-
-	pollfds_iterator getPollFD() const { return _pollfd; };
 
 	std::string getHostname() const { return _hostname; };
 
@@ -56,6 +52,8 @@ public:
 	std::string getUsername() const { return _username; };
 
 	std::string getRealName() const { return _realname; };
+
+	std::string getPrefix() const;
 
 	Channel *getChannel() const { return _channel; };
 
@@ -76,8 +74,6 @@ public:
 	void join(Channel *channel);
 
 	void leave();
-
-	std::string getPrefix() const { return _prefix; };
 };
 
 #endif

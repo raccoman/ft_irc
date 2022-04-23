@@ -11,5 +11,5 @@ void PingCommand::execute(Client *client, std::vector<std::string> arguments) {
 		return;
 	}
 
-	client->reply(RPL_PING(client->getNickname(), arguments.at(0)));
+	client->write(RPL_PING(client->getPrefix(), arguments.at(0)));
 }

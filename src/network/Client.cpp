@@ -1,27 +1,27 @@
 #include <iostream>
 #include "network/Client.hpp"
 
-Client::Client(int fd, const pollfds_iterator &pollfd, const std::string &hostname, int port)
-		: _fd(fd), _pollfd(pollfd), _hostname(hostname), _port(port), _state(HANDSHAKE), _channel(nullptr) {
-
-	_prefix = _nickname;
-	if (_hostname.length()) {
-		if (_username.length())
-			_prefix += "!" + _username;
-		_prefix += "@" + _hostname;
-	}
+Client::Client(int fd,const std::string &hostname, int port)
+		: _fd(fd), _hostname(hostname), _port(port), _state(HANDSHAKE), _channel(nullptr) {
 }
 
 Client::~Client() {}
 
+std::string Client::getPrefix() const {
+	return _nickname + (_username.empty() ? "" : "!" + _username) + (_hostname.empty() ? "" : "@" + _hostname);
+}
+
 void Client::write(const std::string &message) const {
+
+	std::cout << "-> " << message << std::endl;
+
 	std::string buffer = message + "\r\n";
 	if (send(_fd, buffer.c_str(), buffer.length(), 0) < 0)
 		throw std::runtime_error("Error while sending message to client.");
 }
 
 void Client::reply(const std::string &reply) {
-	write(":" + _prefix + " " + reply);
+	write(":" + getPrefix() + " " + reply);
 }
 
 void Client::welcome() {
@@ -45,12 +45,12 @@ void Client::join(Channel *channel) {
 	std::string users;
 	std::vector<std::string> nicknames = channel->getNicknames();
 	for (std::vector<std::string>::iterator it = nicknames.begin(); it != nicknames.end(); it++)
-		users.append(it.operator*());
+		users.append(*it + " ");
 
 	reply(RPL_NAMREPLY(_nickname, channel->getName(), users));
 	reply(RPL_ENDOFNAMES(_nickname, channel->getName()));
 
-	channel->broadcast(RPL_JOIN(_prefix, channel->getName()));
+	channel->broadcast(RPL_JOIN(getPrefix(), channel->getName()));
 
 	char message[100];
 	sprintf(message, "%s has joined channel %s.", _nickname.c_str(), channel->getName().c_str());
@@ -61,7 +61,7 @@ void Client::leave() {
 
 	if (!_channel) return;
 
-	_channel->broadcast(RPL_PART(_nickname, _channel->getName()));
+	_channel->broadcast(RPL_PART(getPrefix(), _channel->getName()));
 	_channel->removeClient(this);
 
 	char message[100];

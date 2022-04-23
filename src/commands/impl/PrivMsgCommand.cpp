@@ -22,7 +22,7 @@ void PrivMsgCommand::execute(Client *client, std::vector<std::string> arguments)
 		message.append(*it + " ");
 	}
 
-	message = message.substr(1);
+	message = message.at(0) == ':' ? message.substr(1) : message;
 
 	if (target.at(0) == '#') {
 

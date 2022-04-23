@@ -21,6 +21,8 @@ CommandHandler::~CommandHandler() {
 
 void CommandHandler::invoke(Client *client, const std::string &message) {
 
+	std::cout << "<- " << message << std::endl;
+
 	std::stringstream ssMessage(message);
 	std::string syntax;
 

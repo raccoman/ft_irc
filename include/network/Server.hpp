@@ -12,6 +12,7 @@ class Server;
 #include <vector>
 #include <map>
 #include <poll.h>
+#include <unistd.h>
 
 #include "commands/CommandHandler.hpp"
 #include "Client.hpp"
