@@ -9,8 +9,8 @@ QuitCommand::~QuitCommand() {}
 
 void QuitCommand::execute(Client *client, std::vector<std::string> arguments) {
 
-	(void)arguments;
+	std::string message = arguments.empty() ? "Leaved." : arguments.at(0).substr(1);
 
-	client->sendMessage(ERR_FATAL("Connection closed"));
+	client->write(RPL_QUIT(client->getPrefix(), message));
 	_server->onClientDisconnect(client->getFD());
 }

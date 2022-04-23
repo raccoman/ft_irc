@@ -23,7 +23,7 @@ std::vector<std::string> Channel::getNicknames() {
 
 void Channel::broadcast(const std::string &message) {
 	for (clients_iterator it = _clients.begin(); it != _clients.end(); it++)
-		(*it)->sendMessage(message);
+		(*it)->write(message);
 }
 
 void Channel::broadcast(const std::string &message, Client *exclude) {
@@ -32,7 +32,7 @@ void Channel::broadcast(const std::string &message, Client *exclude) {
 		if (*it == exclude)
 			continue;
 
-		(*it)->sendMessage(message);
+		(*it)->write(message);
 	}
 }
 

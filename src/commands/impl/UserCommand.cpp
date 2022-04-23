@@ -7,12 +7,12 @@ UserCommand::~UserCommand() {}
 void UserCommand::execute(Client *client, std::vector<std::string> arguments) {
 
 	if (client->isRegistered()) {
-		client->sendMessage(ERR_ALREADYREGISTERED);
+		client->reply(ERR_ALREADYREGISTERED(client->getNickname()));
 		return;
 	}
 
 	if (arguments.size() < 4) {
-		client->sendMessage(ERR_NEEDMOREPARAMS("USER"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "USER"));
 		return;
 	}
 	client->setUsername(arguments[0]);

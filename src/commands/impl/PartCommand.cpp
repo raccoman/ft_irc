@@ -12,7 +12,7 @@ PartCommand::~PartCommand() {}
 void PartCommand::execute(Client *client, std::vector<std::string> arguments) {
 
 	if (arguments.empty()) {
-		client->sendMessage(ERR_NEEDMOREPARAMS("PART"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PART"));
 		return;
 	}
 
@@ -20,12 +20,12 @@ void PartCommand::execute(Client *client, std::vector<std::string> arguments) {
 
 	Channel *channel = _server->getChannel(name);
 	if (!channel) {
-		client->sendMessage(ERR_NOSUCHCHANNEL);
+		client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), name));
 		return;
 	}
 
 	if (!client->getChannel() || client->getChannel()->getName() != name) {
-		client->sendMessage(ERR_NOTONCHANNEL);
+		client->reply(ERR_NOTONCHANNEL(client->getNickname(), name));
 		return;
 	}
 

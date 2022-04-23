@@ -8,7 +8,7 @@ JoinCommand::~JoinCommand() {}
 void JoinCommand::execute(Client *client, std::vector<std::string> arguments) {
 
 	if (arguments.empty()) {
-		client->sendMessage(ERR_NEEDMOREPARAMS("PASS"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PASS"));
 		return;
 	}
 
@@ -18,7 +18,7 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arguments) {
 	Channel *channel = client->getChannel();
 
 	if (channel) {
-		client->sendMessage(ERR_TOOMANYCHANNELS);
+		client->reply(ERR_TOOMANYCHANNELS(client->getNickname(), name));
 		return;
 	}
 
@@ -27,7 +27,7 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arguments) {
 		channel = _server->createChannel(name, password, client);
 
 	if (channel->getPassword() != password) {
-		client->sendMessage(ERR_BADCHANNELKEY);
+		client->reply(ERR_BADCHANNELKEY(client->getNickname(), name));
 		return;
 	}
 

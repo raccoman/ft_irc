@@ -122,7 +122,11 @@ void Server::onClientConnect() {
 	pollfd pollfd = {fd, POLLIN, 0};
 	_pollfds.push_back(pollfd);
 
-	Client *client = new Client(fd, _pollfds.end() - 1, inet_ntoa(s_address.sin_addr), ntohs(s_address.sin_port));
+	char hostname[NI_MAXHOST];
+	if (getnameinfo((struct sockaddr *) &s_address, sizeof(s_address), hostname, NI_MAXHOST, NULL, 0, NI_NUMERICSERV) != 0)
+		throw std::runtime_error("Error while getnameinfo on new client.");
+
+	Client *client = new Client(fd, _pollfds.end() - 1, hostname, ntohs(s_address.sin_port));
 	_clients.insert(std::make_pair(fd, client));
 
 	char message[1000];

@@ -7,14 +7,14 @@ NickCommand::~NickCommand() {}
 void NickCommand::execute(Client *client, std::vector<std::string> arguments) {
 
 	if (arguments.empty() || arguments[0].empty()) {
-		client->sendMessage(ERR_NONICKNAMEGIVEN);
+		client->reply(ERR_NONICKNAMEGIVEN(client->getNickname()));
 		return;
 	}
 
 	std::string nickname = arguments[0];
 
 	if (_server->getClient(nickname)) {
-		client->sendMessage(ERR_NICKNAMEINUSE);
+		client->reply(ERR_NICKNAMEINUSE(client->getNickname()));
 		return;
 	}
 	client->setNickname(nickname);

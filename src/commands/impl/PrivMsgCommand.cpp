@@ -11,7 +11,7 @@ PrivMsgCommand::~PrivMsgCommand() {};
 void PrivMsgCommand::execute(Client *client, std::vector<std::string> arguments) {
 
 	if (arguments.size() < 2 || arguments[0].empty() || arguments[1].empty()) {
-		client->sendMessage(ERR_NEEDMOREPARAMS("PRIVMSG"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PRIVMSG"));
 		return;
 	}
 
@@ -28,9 +28,9 @@ void PrivMsgCommand::execute(Client *client, std::vector<std::string> arguments)
 
 		Channel *channel = client->getChannel();
 		if (!channel)
-			client->sendMessage(ERR_NOSUCHCHANNEL);
+			client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), target));
 
-		channel->broadcast(RPL_PRIVMSG(client->getNickname(), target, message), client);
+		channel->broadcast(RPL_PRIVMSG(client->getPrefix(), target, message), client);
 		return;
 	}
 

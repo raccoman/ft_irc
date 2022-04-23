@@ -30,6 +30,7 @@ private:
 	std::string _nickname;
 	std::string _username;
 	std::string _realname;
+	std::string _prefix;
 
 	ClientState _state;
 
@@ -66,7 +67,9 @@ public:
 
 	void setState(ClientState state) { _state = state; };
 
-	void sendMessage(const std::string &message) const;
+	void write(const std::string &message) const;
+
+	void reply(const std::string &reply);
 
 	void welcome();
 
@@ -74,7 +77,7 @@ public:
 
 	void leave();
 
-	void kick(std::string op, Channel *channel);
+	std::string getPrefix() const { return _prefix; };
 };
 
 #endif

@@ -7,9 +7,9 @@ PingCommand::~PingCommand() {}
 void PingCommand::execute(Client *client, std::vector<std::string> arguments) {
 
 	if (arguments.empty()) {
-		client->sendMessage(ERR_NEEDMOREPARAMS("PING"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PING"));
 		return;
 	}
 
-	client->sendMessage("PONG " + arguments.at(0));
+	client->reply(RPL_PING(client->getNickname(), arguments.at(0)));
 }

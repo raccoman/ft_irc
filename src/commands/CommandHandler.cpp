@@ -9,10 +9,9 @@ CommandHandler::CommandHandler(Server *server) : _server(server) {
 	_commands["PING"] = new PingCommand(_server);
 	_commands["JOIN"] = new JoinCommand(_server);
 	_commands["PART"] = new PartCommand(_server);
-	_commands["KICK"] = new KickCommand(_server);
+	//_commands["KICK"] = new KickCommand(_server);
 
 	_commands["PRIVMSG"] = new PrivMsgCommand(_server);
-//	TODO: PART, QUIT, KICK commands to be implemented
 }
 
 CommandHandler::~CommandHandler() {
@@ -47,7 +46,6 @@ void CommandHandler::invoke(Client *client, const std::string &message) {
 				return;
 			}
 
-			std::cout << name << std::endl;
 			command->execute(client, arguments);
 		}
 		catch (const std::out_of_range &e) {

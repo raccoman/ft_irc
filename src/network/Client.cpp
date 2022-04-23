@@ -3,15 +3,25 @@
 
 Client::Client(int fd, const pollfds_iterator &pollfd, const std::string &hostname, int port)
 		: _fd(fd), _pollfd(pollfd), _hostname(hostname), _port(port), _state(HANDSHAKE), _channel(nullptr) {
+
+	_prefix = _nickname;
+	if (_hostname.length()) {
+		if (_username.length())
+			_prefix += "!" + _username;
+		_prefix += "@" + _hostname;
+	}
 }
 
 Client::~Client() {}
 
-void Client::sendMessage(const std::string &message) const {
+void Client::write(const std::string &message) const {
 	std::string buffer = message + "\r\n";
-
 	if (send(_fd, buffer.c_str(), buffer.length(), 0) < 0)
 		throw std::runtime_error("Error while sending message to client.");
+}
+
+void Client::reply(const std::string &reply) {
+	write(":" + _prefix + " " + reply);
 }
 
 void Client::welcome() {
@@ -19,7 +29,8 @@ void Client::welcome() {
 		return;
 	_state = PLAY;
 
-	sendMessage(RPL_WELCOME(_nickname));
+	reply(RPL_WELCOME(_nickname));
+	//TODO: Maybe add replies 2, 3 and 4
 
 	char message[100];
 	sprintf(message, "%s:%d is now known as %s.", _hostname.c_str(), _port, _nickname.c_str());
@@ -31,15 +42,15 @@ void Client::join(Channel *channel) {
 	channel->addClient(this);
 	_channel = channel;
 
-	channel->broadcast(RPL_JOIN(_nickname, channel->getName()));
-
-	std::string admins;
+	std::string users;
 	std::vector<std::string> nicknames = channel->getNicknames();
 	for (std::vector<std::string>::iterator it = nicknames.begin(); it != nicknames.end(); it++)
-		admins.append(it.operator*() + " ");
+		users.append(it.operator*());
 
-	sendMessage(RPL_NAMREPLY(_nickname, channel->getName(), admins));
-	sendMessage(RPL_ENDOFNAMES(_nickname, channel->getName()));
+	reply(RPL_NAMREPLY(_nickname, channel->getName(), users));
+	reply(RPL_ENDOFNAMES(_nickname, channel->getName()));
+
+	channel->broadcast(RPL_JOIN(_prefix, channel->getName()));
 
 	char message[100];
 	sprintf(message, "%s has joined channel %s.", _nickname.c_str(), channel->getName().c_str());
@@ -55,19 +66,6 @@ void Client::leave() {
 
 	char message[100];
 	sprintf(message, "%s has left channel %s.", _nickname.c_str(), _channel->getName().c_str());
-	ft_log(message);
-
-	_channel = nullptr;
-}
-
-void Client::kick(std::string op, Channel *channel) {
-	// kick client from channel
-	if (!_channel) return;
-
-	channel->removeClient(this);
-
-	char message[100];
-	sprintf(message, "%s kicked %s from %s.", op.c_str(), _nickname.c_str(), _channel->getName().c_str());
 	ft_log(message);
 
 	_channel = nullptr;
