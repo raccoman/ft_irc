@@ -9,7 +9,7 @@ CommandHandler::CommandHandler(Server *server) : _server(server) {
 	_commands["PING"] = new PingCommand(_server);
 	_commands["JOIN"] = new JoinCommand(_server);
 	_commands["PART"] = new PartCommand(_server);
-	//_commands["KICK"] = new KickCommand(_server);
+	_commands["KICK"] = new KickCommand(_server);
 
 	_commands["PRIVMSG"] = new PrivMsgCommand(_server);
 }
@@ -21,7 +21,7 @@ CommandHandler::~CommandHandler() {
 
 void CommandHandler::invoke(Client *client, const std::string &message) {
 
-	std::cout << "<- " << message << std::endl;
+	//std::cout << "<- " << message << std::endl;
 
 	std::stringstream ssMessage(message);
 	std::string syntax;
@@ -44,7 +44,7 @@ void CommandHandler::invoke(Client *client, const std::string &message) {
 			}
 
 			if (!client->isRegistered() && command->authRequired()) {
-				client->sendMessage("0 * : You need syntax be registered in order syntax do that.");
+				client->reply(ERR_NOTREGISTERED(client->getNickname()));
 				return;
 			}
 

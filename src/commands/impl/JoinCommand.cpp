@@ -16,7 +16,6 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arguments) {
 	std::string password = arguments.size() > 1 ? arguments[1] : "";
 
 	Channel *channel = client->getChannel();
-
 	if (channel) {
 		client->reply(ERR_TOOMANYCHANNELS(client->getNickname(), name));
 		return;

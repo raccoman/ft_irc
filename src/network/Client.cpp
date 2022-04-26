@@ -13,7 +13,7 @@ std::string Client::getPrefix() const {
 
 void Client::write(const std::string &message) const {
 
-	std::cout << "-> " << message << std::endl;
+	//std::cout << "-> " << message << std::endl;
 
 	std::string buffer = message + "\r\n";
 	if (send(_fd, buffer.c_str(), buffer.length(), 0) < 0)
@@ -66,6 +66,4 @@ void Client::leave() {
 	char message[100];
 	sprintf(message, "%s has left channel %s.", _nickname.c_str(), _channel->getName().c_str());
 	ft_log(message);
-
-	_channel = nullptr;
 }

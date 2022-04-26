@@ -39,6 +39,7 @@ void Channel::broadcast(const std::string &message, Client *exclude) {
 void Channel::removeClient(Client *client) {
 
 	_clients.erase(std::remove(_clients.begin(), _clients.end(), client), _clients.end());
+	client->setChannel(nullptr);
 
 	if (_clients.empty()) {
 		//TODO: free Channel* and remove from _channels in Server
@@ -52,4 +53,14 @@ void Channel::removeClient(Client *client) {
 		sprintf(message, "%s is now admin of channel %s.", _admin->getNickname().c_str(), _name.c_str());
 		ft_log(message);
 	}
+}
+
+void Channel::kick(Client *client, Client *target, const std::string &reason) {
+
+	broadcast(RPL_KICK(client->getPrefix(), _name, target->getNickname(), reason));
+	removeClient(target);
+
+	char message[100];
+	sprintf(message, "%s kicked %s from channel %s.", client->getNickname().c_str(), target->getNickname().c_str(),_name.c_str());
+	ft_log(message);
 }

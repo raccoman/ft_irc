@@ -65,6 +65,8 @@ public:
 
 	void setState(ClientState state) { _state = state; };
 
+	void setChannel(Channel *channel) { _channel = channel; };
+
 	void write(const std::string &message) const;
 
 	void reply(const std::string &reply);

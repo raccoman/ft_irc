@@ -33,6 +33,7 @@ public:
 	void broadcast(const std::string &message, Client *exclude);
 	void removeClient(Client *client);
 	void addClient(Client *client) { _clients.push_back(client); };
+	void kick(Client *client, Client *target, const std::string &reason);
 
 };
 

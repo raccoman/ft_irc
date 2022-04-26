@@ -27,16 +27,20 @@ void PrivMsgCommand::execute(Client *client, std::vector<std::string> arguments)
 	if (target.at(0) == '#') {
 
 		Channel *channel = client->getChannel();
-		if (!channel)
+		if (!channel) {
 			client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), target));
+			return;
+		}
 
 		channel->broadcast(RPL_PRIVMSG(client->getPrefix(), target, message), client);
 		return;
 	}
 
 	Client *dest = _server->getClient(target);
-	if (!dest)
-		client->sendMessage(ERR_NOSUCHNICK);
+	if (!dest) {
+		client->reply(ERR_NOSUCHNICK(client->getNickname(), target));
+		return;
+	}
 
-	dest->sendMessage(RPL_PRIVMSG(client->getNickname(), target, message));
+	dest->write(RPL_PRIVMSG(client->getPrefix(), target, message));
 }
