@@ -1,9 +1,9 @@
 #Name
-NAME =			ircserv
+NAME =			ircbot
 
 #Compiler
 CC = 			clang++
-CFLAGS = 		-Wall -Werror -Wextra -std=c++98
+CFLAGS = 		-Wall -Werror -Wextra -std=c++11
 LIBRARIES =
 CFLAG = 		-c
 OFLAG =			-o
@@ -26,19 +26,7 @@ HEADERS_DIR =	./include
 
 #Files
 FILES =		main.cpp \
-			Server.cpp \
-			Client.cpp \
-			Channel.cpp \
-			CommandHandler.cpp \
-			NickCommand.cpp \
-			PassCommand.cpp \
-			UserCommand.cpp \
-			QuitCommand.cpp \
-			JoinCommand.cpp \
-			PrivMsgCommand.cpp \
-			PartCommand.cpp \
-			KickCommand.cpp \
-			PingCommand.cpp
+			IrcBot.cpp
 
 #Srcs
 SRCS =			$(foreach FILE, $(FILES), $(shell find $(SOURCES_DIR) -name $(FILE)))
@@ -63,7 +51,7 @@ fclean: clean
 	@$(RM) $(NAME)
 
 run: re
-	./$(NAME) 3000 password
+	./$(NAME) "127.0.0.1" 3000 password
 
 re: fclean all clean
 
