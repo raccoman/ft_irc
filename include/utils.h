@@ -20,17 +20,10 @@
 #define ERR_USERNOTINCHANNEL(source, nickname, channel)	"441 " + source + " " + nickname + " " + channel + " :They aren't on that channel"
 #define ERR_CHANOPRIVSNEEDED(source, channel)			"482 " + source + " " + channel + " :You're not channel operator"
 
-//#define ERR_NOORIGIN(source)					"409 " + source + " :No origin specified"
-//#define ERR_CHANOPRIVSNEEDED(source)			"482 " + source + " :You're not channel operator"
-//#define ERR_USERNOTINCHANNEL(source)			"441 " + source + " :They aren't on that channel"
-
-// PRIVMSG ERRORS
-
 // NUMERIC REPLIES
-#define RPL_WELCOME(client)						"001 " + client + " :Welcome " + client + " to the ft_irc network"
-#define RPL_NAMREPLY(client, channel, users)	"353 " + client + " = " + channel + " :" + users
-#define RPL_ENDOFNAMES(client, channel)			"366 " + client + " " + channel + " :End of /NAMES list."
-
+#define RPL_WELCOME(source)						"001 " + source + " :Welcome " + source + " to the ft_irc network"
+#define RPL_NAMREPLY(source, channel, users)	"353 " + source + " = " + channel + " :" + users
+#define RPL_ENDOFNAMES(source, channel)			"366 " + source + " " + channel + " :End of /NAMES list."
 
 // COMMAND REPLIES
 #define RPL_JOIN(source, channel)					":" + source + " JOIN :" + channel

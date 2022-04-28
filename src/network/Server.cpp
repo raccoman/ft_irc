@@ -30,7 +30,7 @@ void Server::start() {
 				continue;
 
 			if ((it->revents & POLLHUP) == POLLHUP) {
-				//onClientDisconnect(it->fd);
+				onClientDisconnect(it->fd);
 				break;
 			}
 
@@ -163,10 +163,12 @@ void Server::onClientDisconnect(int fd) {
 }
 
 void Server::onClientMessage(int fd) {
-	clients_iterator it = _clients.find(fd);
-	if (it == _clients.end()) return;
-
-	_commandHandler->invoke(it->second, readMessage(fd));
+	try {
+		Client *client = _clients.at(fd);
+		_commandHandler->invoke(client, readMessage(fd));
+	}
+	catch (const std::out_of_range &ex) {
+	}
 }
 
 Client *Server::getClient(const std::string &nickname) {

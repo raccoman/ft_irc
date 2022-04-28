@@ -13,5 +13,5 @@ void QuitCommand::execute(Client *client, std::vector<std::string> arguments) {
 	reason = reason.at(0) == ':' ? reason.substr(1) : reason;
 
 	client->write(RPL_QUIT(client->getPrefix(), reason));
-	_server->onClientDisconnect(client->getFD());
+	//_server->onClientDisconnect(client->getFD());
 }

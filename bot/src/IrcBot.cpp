@@ -34,6 +34,9 @@ int IrcBot::newSocket() {
 }
 
 void IrcBot::flush(const std::string &message) {
+
+	std::cout << CC_RED << "[-] " << message << std::endl;
+
 	std::string normalized = message + "\r\n";
 	write(_sock, normalized.c_str(), normalized.size());
 }
@@ -54,7 +57,7 @@ void IrcBot::receiver(IrcBot *instance) {
 void IrcBot::authenticate(const std::string &as) {
 	flush("PASS " + _password);
 	flush("NICK " + as);
-	flush("USER ircbot 0 * :42's ircbot");
+	flush("USER ircbot 0 * :42 ft_irc's bot");
 }
 
 void IrcBot::start() {
@@ -72,10 +75,54 @@ void IrcBot::start() {
 
 	flush("QUIT :Bye, bye...");
 
-	close(_sock);
-	std::cout << "Bye, bye..." << std::endl;
+	// TCP Stream is non-blocking, closing socket will truncate QUIT message sent from client
+	// Maybe implement some sort of waiting???
+	// close(_sock);
+}
+
+void IrcBot::sendPrivMsg(const std::string &source, const std::string &message) {
+	flush("PRIVMSG " + source + " :" + message);
 }
 
 void IrcBot::onMessageReceived(const std::string &message) {
-	std::cout << message;
+
+	ft::vec_string args = ft::split(message);
+
+	if (args.size() < 2)
+		return;
+
+	std::string source = args.at(0);
+	std::string type = args.at(1);
+
+	if (atoi(type.c_str()) > 0) {
+
+		if (args.size() < 3)
+			return;
+
+		onNumericReply(source, type, ft::vec_string(args.begin() + 3, args.end()));
+		return;
+	}
+
+	onCommandReply(source, type, ft::vec_string(args.begin() + 2, args.end()));
+}
+
+void IrcBot::onNumericReply(const std::string &source, const std::string &reply, std::vector<std::string> args) {
+	(void) source;
+	std::cout << CC_GRN << "[+] (" << reply << ") " << ft::join(" ", args) << std::endl;
+}
+
+void IrcBot::onCommandReply(const std::string &source, const std::string &cmd, std::vector<std::string> args) {
+
+	std::string nickname = source;
+	std::string::size_type pos = nickname.find('!');
+	if (pos != std::string::npos)
+		nickname = nickname.substr(1, pos - 1);
+
+	std::cout << CC_GRN << "[+] (" << nickname << ") " << cmd << " " << ft::join(" ", args) << std::endl;
+
+	if (cmd == "PRIVMSG") {
+		sendPrivMsg(nickname, "Ma succhiamelo!");
+		return;
+	}
+
 }
