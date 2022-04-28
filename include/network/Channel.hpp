@@ -8,7 +8,7 @@ class Channel;
 
 # include "Server.hpp"
 # include "Client.hpp"
-# include "utils.h"
+# include "utils.hpp"
 
 class Channel {
 

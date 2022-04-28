@@ -1,5 +1,5 @@
-#ifndef FT_IRC_UTILS_H
-#define FT_IRC_UTILS_H
+#ifndef FT_IRC_UTILS_HPP
+#define FT_IRC_UTILS_HPP
 
 #include <iostream>
 #include <string>
@@ -49,4 +49,4 @@ static inline void ft_log(const std::string &message) {
 	std::cout << "[" << str << "] " << message << std::endl;
 };
 
-#endif //FT_IRC_UTILS_H
+#endif //FT_IRC_UTILS_HPP
