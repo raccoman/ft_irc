@@ -3,6 +3,7 @@
 IrcBot::IrcBot(const std::string &host, const std::string &port, const std::string &password) :
 		_running(1), _host(host), _port(port), _password(password) {
 	_sock = newSocket();
+	std::srand(getpid() * std::time(NULL));
 }
 
 IrcBot::~IrcBot() {
@@ -121,6 +122,30 @@ void IrcBot::onCommandReply(const std::string &source, const std::string &cmd, s
 	std::cout << CC_GRN << "[+] (" << nickname << ") " << cmd << " " << ft::join(" ", args) << std::endl;
 
 	if (cmd == "PRIVMSG") {
+
+		if (args.size() >= 2 && args.at(1).substr(1) == "ROLLDICE") {
+			sendPrivMsg(nickname,
+						ft::string_format("http://roll.diceapi.com/images/poorly-drawn/d6/%d.png", (rand() % 6) + 1));
+			return;
+		}
+
+		if (args.size() >= 2 && args.at(1).substr(1) == "DRAWCARD") {
+
+			std::string cards = "234567890JQKA";
+			std::string suits = "HCSD";
+
+			sendPrivMsg(nickname,
+						ft::string_format("https://deckofcardsapi.com/static/img/%c%c.png",
+										  cards[rand() % 13],
+										  suits[rand() % 4]));
+			return;
+		}
+
+		if (args.size() >= 2 && args.at(1).substr(1) == "WEATHER") {
+			sendPrivMsg(nickname, "https://wttr.in/_m0_lang=it.png");
+			return;
+		}
+
 		sendPrivMsg(nickname, "Ma succhiamelo!");
 		return;
 	}
