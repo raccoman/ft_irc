@@ -24,6 +24,16 @@ public:
 	virtual void execute(Client *client, std::vector<std::string> arguments) = 0;
 };
 
+class NoticeCommand : public Command
+{
+public:
+	NoticeCommand(Server *server);
+	~NoticeCommand();
+
+	void execute(Client *client, std::vector<std::string> arguments);
+};
+
+
 class PrivMsgCommand : public Command
 {
 public:
@@ -104,5 +114,15 @@ public:
 
 	void execute(Client *client, std::vector<std::string> arguments);
 };
+
+class PongCommand : public Command
+{
+public:
+	PongCommand(Server *server);
+	~PongCommand();
+
+	void execute(Client *client, std::vector<std::string> arguments);
+};
+
 
 #endif // COMMAND_HPP

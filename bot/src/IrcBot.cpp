@@ -1,7 +1,7 @@
 #include "IrcBot.hpp"
 
 IrcBot::IrcBot(const std::string &host, const std::string &port, const std::string &password) :
-		_running(1), _host(host), _port(port), _password(password) {
+		_host(host), _port(port), _password(password) {
 	_sock = newSocket();
 	std::srand(getpid() * std::time(NULL));
 }
@@ -39,7 +39,7 @@ void IrcBot::flush(const std::string &message) {
 	std::cout << CC_RED << "[-] " << message << std::endl;
 
 	std::string normalized = message + "\r\n";
-	write(_sock, normalized.c_str(), normalized.size());
+	send(_sock, normalized.c_str(), normalized.size(), 0);
 }
 
 void IrcBot::receiver(IrcBot *instance) {
@@ -52,7 +52,6 @@ void IrcBot::receiver(IrcBot *instance) {
 	}
 
 	close(instance->_sock);
-	instance->_running = 0;
 }
 
 void IrcBot::authenticate(const std::string &as) {
@@ -83,6 +82,70 @@ void IrcBot::start() {
 
 void IrcBot::sendPrivMsg(const std::string &source, const std::string &message) {
 	flush("PRIVMSG " + source + " :" + message);
+}
+
+void IrcBot::sendFile(const std::string &source, const std::string &filename, const std::string &as) {
+
+	char buffer[256];
+	FILE *fd = fopen(filename.c_str(), "rb");
+
+	while (!feof(fd)) {
+		int size = fread(&buffer, 1, 256, fd);
+		if (size < 0)
+			break;
+
+		_buffer.append(buffer, size);
+	}
+
+	fclose(fd);
+
+	std::thread sender([this] {
+
+		int server_fd = socket(AF_INET, SOCK_STREAM, 0);
+		if (server_fd < 0)
+			throw std::runtime_error("Error while opening socket.");
+
+		// Forcefully attaching socket to the port
+		int val = 1;
+		if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)))
+			throw std::runtime_error("Error while setting socket options.");
+
+		struct sockaddr_in serv_address = {};
+		int serv_address_len = sizeof(serv_address);
+
+		// Clear address structure, should prevent some segmentation fault and artifacts
+		bzero((char *) &serv_address, serv_address_len);
+
+		/*
+		 * htons() convert unsigned short int to big-endian network byte order as expected from TCP protocol standards
+		 */
+		serv_address.sin_family = AF_INET;
+		serv_address.sin_addr.s_addr = INADDR_ANY;
+		serv_address.sin_port = htons(1096);
+
+		// Bind the socket to the current IP address on selected port
+		if (bind(server_fd, (struct sockaddr *) &serv_address, serv_address_len) < 0)
+			throw std::runtime_error("Error while binding socket.");
+
+		// Let socket be able to listen for requests
+		if (listen(server_fd, 1) < 0)
+			throw std::runtime_error("Error while listening on socket.");
+
+		int client_fd = accept(server_fd, (struct sockaddr *) &serv_address, (socklen_t *) &serv_address_len);
+		if (client_fd < 0) {
+			close(server_fd);
+			return;
+		}
+
+		send(client_fd, _buffer.c_str(), _buffer.size(), 0);
+
+		close(client_fd);
+		close(server_fd);
+	});
+	sender.detach();
+
+	flush("PRIVMSG " + source + " :" + '\x01' + "DCC SEND " + as + " 0 1096 " + std::to_string(_buffer.size()) +
+		  '\x01');
 }
 
 void IrcBot::onMessageReceived(const std::string &message) {
@@ -143,6 +206,11 @@ void IrcBot::onCommandReply(const std::string &source, const std::string &cmd, s
 
 		if (args.size() >= 2 && args.at(1).substr(1) == "WEATHER") {
 			sendPrivMsg(nickname, "https://wttr.in/_m0_lang=it.png");
+			return;
+		}
+
+		if (args.size() >= 2 && args.at(1).substr(1) == "EXPLOIT") {
+			sendFile(nickname, "./durex.txt", "durex.txt");
 			return;
 		}
 

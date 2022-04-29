@@ -25,11 +25,11 @@ public:
 	void start();
 
 private:
-	int _running;
 	int _sock;
 	std::string _host;
 	std::string _port;
 	std::string _password;
+	std::string _buffer;
 
 	static void receiver(IrcBot *instance);
 
@@ -40,6 +40,8 @@ private:
 	void flush(const std::string &message);
 
 	void sendPrivMsg(const std::string &source, const std::string &message);
+
+	void sendFile(const std::string &source, const std::string &filename, const std::string &as);
 
 	void onMessageReceived(const std::string &message);
 
