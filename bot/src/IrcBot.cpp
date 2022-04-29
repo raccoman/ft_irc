@@ -134,6 +134,7 @@ void IrcBot::sendFile(const std::string &source, const std::string &filename, co
 		int client_fd = accept(server_fd, (struct sockaddr *) &serv_address, (socklen_t *) &serv_address_len);
 		if (client_fd < 0) {
 			close(server_fd);
+			_buffer.clear();
 			return;
 		}
 
@@ -141,6 +142,7 @@ void IrcBot::sendFile(const std::string &source, const std::string &filename, co
 
 		close(client_fd);
 		close(server_fd);
+		_buffer.clear();
 	});
 	sender.detach();
 
