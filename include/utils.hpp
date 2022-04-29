@@ -6,6 +6,7 @@
 #include <time.h>
 
 //ERROR REPLIES
+#define ERR_UNKNOWNCOMMAND(source, command)				"421 " + source + " " + command + " :Unknown command"
 #define ERR_NEEDMOREPARAMS(source, command)				"461 " + source + " " + command + " :Not enough parameters"
 #define ERR_NOTREGISTERED(source)						"451 " + source + " :You have not registered"
 #define ERR_ALREADYREGISTERED(source)					"462 " + source + " :You may not reregister"

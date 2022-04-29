@@ -51,9 +51,7 @@ void CommandHandler::invoke(Client *client, const std::string &message) {
 			command->execute(client, arguments);
 		}
 		catch (const std::out_of_range &e) {
-			char buffer[100];
-			sprintf(buffer, "%s:%d has sent unknown command: %s", client->getHostname().c_str(), client->getPort(),name.c_str());
-			ft_log(buffer);
+			client->reply(ERR_UNKNOWNCOMMAND(client->getNickname(), name));
 		}
 
 	}
