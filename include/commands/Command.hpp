@@ -5,6 +5,7 @@ class Command;
 
 #include <string>
 #include <numeric>
+#include <regex>
 #include "network/Client.hpp"
 #include "network/Server.hpp"
 
@@ -12,11 +13,11 @@ class Command
 {
 
 protected:
-	Server	*_server;
-	bool	_authRequired;
+	Server *_server;
+	bool _authRequired;
 
 public:
-	explicit Command(Server *server, bool authRequired = true) : _server(server), _authRequired(authRequired) {};
+	explicit Command(Server *server, bool authRequired = true) : _server(server), _authRequired(authRequired){};
 	virtual ~Command(){};
 
 	bool authRequired() const { return _authRequired; };
@@ -32,7 +33,6 @@ public:
 
 	void execute(Client *client, std::vector<std::string> arguments);
 };
-
 
 class PrivMsgCommand : public Command
 {
@@ -124,5 +124,13 @@ public:
 	void execute(Client *client, std::vector<std::string> arguments);
 };
 
+class ModeCommand : public Command
+{
+public:
+	ModeCommand(Server *server);
+	~ModeCommand();
+
+	void execute(Client *client, std::vector<std::string> arguments);
+};
 
 #endif // COMMAND_HPP

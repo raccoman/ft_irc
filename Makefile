@@ -40,7 +40,8 @@ FILES =		main.cpp \
 			KickCommand.cpp \
 			PingCommand.cpp \
 			PongCommand.cpp \
-			NoticeCommand.cpp
+			NoticeCommand.cpp \
+			ModeCommand.cpp
 
 #Srcs
 SRCS =			$(foreach FILE, $(FILES), $(shell find $(SOURCES_DIR) -name $(FILE)))
