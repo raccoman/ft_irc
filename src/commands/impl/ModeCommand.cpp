@@ -17,7 +17,7 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arguments)
     }
 
     // std::smatch match;
-    // std::regex regex("([+-]i)*([+-]n)*([+-]t)*([+-]l)*([+-]k)*");
+    // std::regex regex("([+-]i*)([+-]n*)([+-]t*)([+-]l*)([+-]k*)");
     // while (std::regex_search(arguments[1], match, regex))
     // {
     //     for (size_t i = 0; i < match.size(); ++i)
@@ -25,4 +25,59 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arguments)
     //         std::cout << match[i] << std::endl;
     //     }
     // }
+
+    int i(-1);
+    char c;
+    while (c = arguments[1][++i])
+    {
+        if (c == '+' || c == '-')
+        {
+            continue;
+        }
+        else if (c == 'i')
+        {
+            if (arguments[1][i - 1] == '-')
+                // remove invite only
+                std::cout << "meno i" << std::endl;
+            else if (arguments[1][i - 1] == '+')
+                // add invite only
+                std::cout << "più i" << std::endl;
+        }
+        else if (c == 'n')
+        {
+            if (arguments[1][i - 1] == '-')
+                // remove no external message
+                ;
+            else if (arguments[1][i - 1] == '+')
+                // add no external message
+                ;
+        }
+        else if (c == 't')
+        {
+            if (arguments[1][i - 1] == '-')
+                // remove protected topic mode
+                ;
+            else if (arguments[1][i - 1] == '+')
+                // add protected topic mode
+                ;
+        }
+        else if (c == 'l')
+        {
+            if (arguments[1][i - 1] == '-')
+                // remove client limit channel mode
+                ;
+            else if (arguments[1][i - 1] == '+')
+                // add client limit channel mod
+                ;
+        }
+        else if (c == 'k')
+        {
+            if (arguments[1][i - 1] == '-')
+                // remove key channel mode
+                ;
+            else if (arguments[1][i - 1] == '+')
+                // add key channel mode
+                ;
+        }
+    }
 }
