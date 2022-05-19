@@ -60,10 +60,12 @@ void Client::leave() {
 
 	if (!_channel) return;
 
+	const std::string name = _channel->getName();
+
 	_channel->broadcast(RPL_PART(getPrefix(), _channel->getName()));
 	_channel->removeClient(this);
 
 	char message[100];
-	sprintf(message, "%s has left channel %s.", _nickname.c_str(), _channel->getName().c_str());
+	sprintf(message, "%s has left channel %s.", _nickname.c_str(), name.c_str());
 	ft_log(message);
 }

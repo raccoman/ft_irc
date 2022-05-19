@@ -51,6 +51,7 @@ void CommandHandler::invoke(Client *client, const std::string &message) {
 			command->execute(client, arguments);
 		}
 		catch (const std::out_of_range &e) {
+			std::cout << message << std::endl;
 			client->reply(ERR_UNKNOWNCOMMAND(client->getNickname(), name));
 		}
 
