@@ -28,7 +28,7 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arguments)
 
     int i(-1);
     char c;
-    while (c = arguments[1][++i])
+    while ((c = arguments[1][++i]))
     {
         if (c == '+' || c == '-')
         {
