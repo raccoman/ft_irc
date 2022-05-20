@@ -27,7 +27,11 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arguments)
     // }
 
     int i(-1);
+    int n(2);
     char c;
+
+    Channel *channel = client->getChannel();
+
     while ((c = arguments[1][++i]))
     {
         if (c == '+' || c == '-')
@@ -67,17 +71,18 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arguments)
                 // remove client limit channel mode
                 ;
             else if (arguments[1][i - 1] == '+')
+            {
                 // add client limit channel mod
                 ;
+                n++;
+            }
         }
         else if (c == 'k')
         {
             if (arguments[1][i - 1] == '-')
-                // remove key channel mode
-                ;
+                channel->setPassword(std::string());
             else if (arguments[1][i - 1] == '+')
-                // add key channel mode
-                ;
+                channel->setPassword(arguments[n]);
         }
     }
 }
