@@ -27,6 +27,7 @@ public:
 	Client* getAdmin() { return _admin; };
 	std::string getName() const { return _name; };
 	std::string getPassword() const { return _password; };
+	void		setPassword(std::string password) { this->_password = password; };
 	std::vector<std::string> getNicknames();
 
 	void broadcast(std::string const &message);
