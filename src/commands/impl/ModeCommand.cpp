@@ -80,7 +80,7 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arguments)
         else if (c == 'k')
         {
             if (arguments[1][i - 1] == '-')
-                channel->setPassword(std::string());
+                channel->setPassword("");
             else if (arguments[1][i - 1] == '+')
                 channel->setPassword(arguments[n]);
         }
