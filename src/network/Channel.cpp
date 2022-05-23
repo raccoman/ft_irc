@@ -5,7 +5,7 @@
 #include "network/Channel.hpp"
 
 Channel::Channel(const std::string &name, const std::string &password, Client *admin)
-		: _name(name), _password(password), _admin(admin) , _max_clients(0){
+		: _name(name), _password(password), _admin(admin) , _max_clients(0), _n(false){
 }
 
 Channel::~Channel() {}

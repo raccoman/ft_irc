@@ -21,6 +21,7 @@ private:
 	std::vector<Client *>	_clients;
 	size_t					_max_clients;
 
+	bool					_n;
 public:
 	Channel(const std::string &name, const std::string &password, Client *admin);
 	~Channel();
@@ -33,6 +34,8 @@ public:
 	std::string getPassword() const { return _password; };
 	void		setPassword(std::string password) { this->_password = password; };
 	std::vector<std::string> getNicknames();
+	bool		isNoExt() const { return _n; };
+	void		setNoExt(bool n) { this->_n = n; };
 
 	void broadcast(std::string const &message);
 	void broadcast(const std::string &message, Client *exclude);

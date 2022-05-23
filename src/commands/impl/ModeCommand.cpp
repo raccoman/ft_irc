@@ -50,11 +50,15 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arguments)
         else if (c == 'n')
         {
             if (arguments[1][i - 1] == '-')
-                // remove no external message
-                ;
+            {
+				channel->setNoExt(false);
+				channel->broadcast(RPL_MODE(client->getPrefix(), channel->getName(), "-n", ""));
+			}
             else if (arguments[1][i - 1] == '+')
-                // add no external message
-                ;
+            {
+				channel->setNoExt(true);
+				channel->broadcast(RPL_MODE(client->getPrefix(), channel->getName(), "+n", ""));
+			}
         }
         else if (c == 't')
         {
