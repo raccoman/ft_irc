@@ -68,12 +68,14 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arguments)
         else if (c == 'l')
         {
             if (arguments[1][i - 1] == '-')
-                // remove client limit channel mode
-                ;
-            else if (arguments[1][i - 1] == '+')
+			{
+                channel->setMaxClients(0);
+				channel->broadcast(RPL_MODE(client->getPrefix(), channel->getName(), "-l", ""));
+			}
+			else if (arguments[1][i - 1] == '+')
             {
-                // add client limit channel mod
-                ;
+                channel->setMaxClients( static_cast<size_t>(atol(arguments[n])) );
+				channel->broadcast(RPL_MODE(client->getPrefix(), channel->getName(), "+l", arguments[n]));
                 n++;
             }
         }

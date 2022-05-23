@@ -19,6 +19,7 @@ private:
 	std::string				_password;
 	Client					*_admin;
 	std::vector<Client *>	_clients;
+	size_t					_max_clients;
 
 public:
 	Channel(const std::string &name, const std::string &password, Client *admin);
@@ -26,6 +27,9 @@ public:
 
 	Client* getAdmin() { return _admin; };
 	std::string getName() const { return _name; };
+	size_t		getMaxClients() const { return _max_clients; };
+	void		setMaxClients(size_t max_clients) { this->_max_clients = max_clients; };
+	size_t		getNumClients() const { return _clients.size(); }; // size of vector is exact number of connected clients?
 	std::string getPassword() const { return _password; };
 	void		setPassword(std::string password) { this->_password = password; };
 	std::vector<std::string> getNicknames();
