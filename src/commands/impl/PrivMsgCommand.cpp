@@ -41,7 +41,7 @@ void PrivMsgCommand::execute(Client *client, std::vector<std::string> arguments)
 					break;
 			if (i == nicknames.end())
 			{
-				client->reply(ERR_CANNOTSENDTOCHAN(client->getNickname, target));
+				client->reply(ERR_CANNOTSENDTOCHAN(client->getNickname(), target));
 				return;
 			}
 		}

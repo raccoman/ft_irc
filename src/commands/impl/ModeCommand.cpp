@@ -78,7 +78,7 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arguments)
 			}
 			else if (arguments[1][i - 1] == '+')
             {
-                channel->setMaxClients( static_cast<size_t>(atol(arguments[n])) );
+                channel->setMaxClients( static_cast<size_t>(stol(arguments[n])) );
 				channel->broadcast(RPL_MODE(client->getPrefix(), channel->getName(), "+l", arguments[n]));
                 n++;
             }
