@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <time.h>
+#include <cstdlib>
 
 //ERROR REPLIES
 #define ERR_UNKNOWNCOMMAND(source, command)				"421 " + source + " " + command + " :Unknown command"
@@ -20,6 +21,8 @@
 #define ERR_NOSUCHNICK(source, nickname)				"401 " + source + " " + nickname + " :No such nick/channel"
 #define ERR_USERNOTINCHANNEL(source, nickname, channel)	"441 " + source + " " + nickname + " " + channel + " :They aren't on that channel"
 #define ERR_CHANOPRIVSNEEDED(source, channel)			"482 " + source + " " + channel + " :You're not channel operator"
+#define ERR_CHANNELISFULL(source, channel)				"471 " + source + " " + channel + " :Cannot join channel (+l)"
+#define ERR_CANNOTSENDTOCHAN(source, channel)			"404 " + source + " " + channel + " :Cannot send to channel"
 
 // NUMERIC REPLIES
 #define RPL_WELCOME(source)						"001 " + source + " :Welcome " + source + " to the ft_irc network"
@@ -34,7 +37,7 @@
 #define RPL_NOTICE(source, target, message)			":" + source + " NOTICE " + target + " :" + message
 #define RPL_QUIT(source, message)					":" + source + " QUIT :Quit: " + message
 #define RPL_KICK(source, channel, target, reason)	":" + source + " KICK " + channel + " " + target + " :" + reason
-
+#define RPL_MODE(source, channel, modes, args)		":" + source + " MODE " + channel + " " + modes + " " + args
 
 static inline void ft_log(const std::string &message) {
 	time_t rawtime;

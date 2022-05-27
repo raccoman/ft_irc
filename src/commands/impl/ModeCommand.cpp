@@ -4,80 +4,61 @@ ModeCommand::ModeCommand(Server *server) : Command(server) {}
 
 ModeCommand::~ModeCommand() {}
 
-// format: KICK <channel> <user> *( "," <user> ) [<comment>]
-void ModeCommand::execute(Client *client, std::vector<std::string> arguments)
-{
+void ModeCommand::execute(Client *client, std::vector<std::string> arguments) {
 
-    (void)client;
+	if (arguments.size() < 2) {
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "MODE"));
+		return;
+	}
 
-    if (arguments.size() < 2)
-    {
-        client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "MODE"));
-        return;
-    }
+	std::string target = arguments.at(0);
 
-    // std::smatch match;
-    // std::regex regex("([+-]i*)([+-]n*)([+-]t*)([+-]l*)([+-]k*)");
-    // while (std::regex_search(arguments[1], match, regex))
-    // {
-    //     for (size_t i = 0; i < match.size(); ++i)
-    //     {
-    //         std::cout << match[i] << std::endl;
-    //     }
-    // }
+	Channel *channel = _server->getChannel(target); //MODE on clients not implemented
+	if (!channel) {
+		client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), target));
+		return;
+	}
 
-    int i(-1);
-    char c;
-    while (c = arguments[1][++i])
-    {
-        if (c == '+' || c == '-')
-        {
-            continue;
-        }
-        else if (c == 'i')
-        {
-            if (arguments[1][i - 1] == '-')
-                // remove invite only
-                std::cout << "meno i" << std::endl;
-            else if (arguments[1][i - 1] == '+')
-                // add invite only
-                std::cout << "più i" << std::endl;
-        }
-        else if (c == 'n')
-        {
-            if (arguments[1][i - 1] == '-')
-                // remove no external message
-                ;
-            else if (arguments[1][i - 1] == '+')
-                // add no external message
-                ;
-        }
-        else if (c == 't')
-        {
-            if (arguments[1][i - 1] == '-')
-                // remove protected topic mode
-                ;
-            else if (arguments[1][i - 1] == '+')
-                // add protected topic mode
-                ;
-        }
-        else if (c == 'l')
-        {
-            if (arguments[1][i - 1] == '-')
-                // remove client limit channel mode
-                ;
-            else if (arguments[1][i - 1] == '+')
-                // add client limit channel mod
-                ;
-        }
-        else if (c == 'k')
-        {
-            if (arguments[1][i - 1] == '-')
-                // remove key channel mode
-                ;
-            else if (arguments[1][i - 1] == '+')
-                // add key channel mode
-                ;
-        }
-    }
+	if (channel->getAdmin() != client) {
+		client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), target));
+		return;
+	}
+
+	int i = 0;
+	int p = 2;
+	char c;
+
+	while ((c = arguments[1][i])) {
+
+		char prevC = i > 0 ? arguments[1][i - 1] : '\0';
+		bool active = prevC == '+';
+
+		switch (c) {
+
+			case 'n': {
+				channel->setNoExt(active);
+				channel->broadcast(RPL_MODE(client->getPrefix(), channel->getName(), (active ? "+n" : "-n"), ""));
+				break;
+			}
+
+			case 'l': {
+				channel->setMaxClients(active ? std::stol(arguments[p]) : 0);
+				channel->broadcast(RPL_MODE(client->getPrefix(), channel->getName(), (active ? "+l" : "-l"), (active ? arguments[p] : "")));
+				p += active ? 1 : 0;
+				break;
+			}
+
+			case 'k': {
+				channel->setPassword(active ? arguments[p] : "");
+				channel->broadcast(RPL_MODE(client->getPrefix(), channel->getName(), (active ? "+k" : "-k"), (active ? arguments[p] : "")));
+				p += active ? 1 : 0;
+				break;
+			}
+
+			default:
+				break;
+		}
+
+		i++;
+	}
 }

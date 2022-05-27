@@ -16,9 +16,13 @@ class Channel {
 
 private:
 	std::string				_name;
-	std::string				_password;
 	Client					*_admin;
 	std::vector<Client *>	_clients;
+
+	/** Modes */
+	std::string				_k;
+	size_t					_l;
+	bool					_n;
 
 public:
 	Channel(const std::string &name, const std::string &password, Client *admin);
@@ -26,8 +30,17 @@ public:
 
 	Client* getAdmin() { return _admin; };
 	std::string getName() const { return _name; };
-	std::string getPassword() const { return _password; };
-	std::vector<std::string> getNicknames();
+
+	std::string getPassword() const { return _k; };
+	void		setPassword(std::string k) { this->_k = k; };
+	size_t		getMaxClients() const { return _l; };
+	void		setMaxClients(size_t l) { this->_l = l; };
+	bool		isNoExt() const { return _n; };
+	void		setNoExt(bool n) { this->_n = n; };
+
+
+	size_t						getNumClients() const { return _clients.size(); };
+	std::vector<std::string>	getNicknames();
 
 	void broadcast(std::string const &message);
 	void broadcast(const std::string &message, Client *exclude);

@@ -5,7 +5,7 @@
 #include "network/Channel.hpp"
 
 Channel::Channel(const std::string &name, const std::string &password, Client *admin)
-		: _name(name), _password(password), _admin(admin) {
+		: _name(name), _admin(admin), _k(password), _l(0), _n(false) {
 }
 
 Channel::~Channel() {}
@@ -61,6 +61,7 @@ void Channel::kick(Client *client, Client *target, const std::string &reason) {
 	removeClient(target);
 
 	char message[100];
-	sprintf(message, "%s kicked %s from channel %s.", client->getNickname().c_str(), target->getNickname().c_str(),_name.c_str());
+	sprintf(message, "%s kicked %s from channel %s.", client->getNickname().c_str(), target->getNickname().c_str(),
+			_name.c_str());
 	ft_log(message);
 }

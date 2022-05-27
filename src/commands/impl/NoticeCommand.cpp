@@ -28,6 +28,20 @@ void NoticeCommand::execute(Client *client, std::vector<std::string> arguments) 
 			return;
 		}
 
+		if (channel->isNoExt()){
+			std::vector<std::string>			nicknames(channel->getNicknames());
+			std::vector<std::string>::iterator	i;
+			
+			for (i = nicknames.begin(); i != nicknames.end(); i++)
+				if (*i == client->getNickname())
+					break;
+			if (i == nicknames.end())
+			{
+				client->reply(ERR_CANNOTSENDTOCHAN(client->getNickname(), target));
+				return;
+			}
+		}
+
 		channel->broadcast(RPL_NOTICE(client->getPrefix(), target, message), client);
 		return;
 	}
