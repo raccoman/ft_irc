@@ -21,6 +21,7 @@ set(SOURCES
 		src/commands/impl/KickCommand.cpp
 		src/commands/impl/PingCommand.cpp
 		src/commands/impl/PongCommand.cpp
-		src/commands/impl/NoticeCommand.cpp)
+		src/commands/impl/NoticeCommand.cpp
+		src/commands/impl/ModeCommand.cpp)
 
 add_executable(ft_irc src/main.cpp ${SOURCES})
